@@ -64,3 +64,8 @@ C:\Users\Proyecto\Desktop\PrimerProyectoIA\IA\bin\Microsoft.CodeDom.Providers.Do
 C:\Users\Proyecto\Desktop\PrimerProyectoIA\IA\obj\Debug\IA.csprojResolveAssemblyReference.cache
 C:\Users\Proyecto\Desktop\PrimerProyectoIA\IA\obj\Debug\IA.dll
 C:\Users\Proyecto\Desktop\PrimerProyectoIA\IA\obj\Debug\IA.pdb
+C:\Users\Proyecto\Desktop\PrimerProyectoIA\IA\bin\Spire.Doc.dll
+C:\Users\Proyecto\Desktop\PrimerProyectoIA\IA\bin\Spire.License.dll
+C:\Users\Proyecto\Desktop\PrimerProyectoIA\IA\bin\Spire.Pdf.dll
+C:\Users\Proyecto\Desktop\PrimerProyectoIA\IA\bin\WatiN.Core.dll
+C:\Users\Proyecto\Desktop\PrimerProyectoIA\IA\bin\Ionic.Zip.dll

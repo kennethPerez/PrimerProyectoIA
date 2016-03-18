@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css">
     <style>body{padding-top:50px;}.starter-template{padding:40px 15px;text-align:center;}</style>
+    <link rel="stylesheet" type="text/css" href="~/Style/css.css" media="all" />
 </head>
 <body>
     <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
@@ -26,7 +27,6 @@
             <div class="collapse navbar-collapse">
                 <ul class="nav navbar-nav">
                     <li><a href="#">Analisis de Texto</a></li>
-                    <li><a href="#">Sniffer</a></li>
                 </ul>
             </div><!--.nav-collapse -->
         </div>
@@ -34,7 +34,24 @@
 
     <div class="container">
         
+        <form id="form1" runat="server">
 
+            <div class="Text-Area">    
+                <asp:TextBox ID="text_area" runat="server" class="texteditor" TextMode="MultiLine"></asp:TextBox>
+            </div>
+            <div class="intro">
+                <asp:Button runat="server" Text="Cargar Archivo" OnClick="CargarArchivo_Click" />
+                <asp:Button runat="server" Text="Cargar Html" OnClick="HtmlFile_Click" />
+                <asp:Button ID="ParseURL" runat="server" OnClick="ParseURL_Click" Text="Cargar URL" />
+                <asp:Button ID="btnXml" runat="server" OnClick="Xml_Click" Text="UnZipXML" />
+                <asp:Button ID="btnJson" runat="server" OnClick="Json_Click" Text="UnZipJson" />
+                <asp:Button ID="buttonCarpeta" runat="server" OnClick="carpeta_click" Text="Cargar Carpeta" />
+            </div>
+            <hr>
+            <center><asp:FileUpload ID="FileUpload" runat="server" ></asp:FileUpload></center>
+            
+
+        </form>
 
     </div>
 
