@@ -12,6 +12,7 @@
     <link rel="stylesheet" type="text/css" href="~/Style/css.css" media="all" />
 </head>
 <body>
+
     <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
         <div class="container">
             <div class="navbar-header">
@@ -46,6 +47,7 @@
                 <asp:Button ID="btnXml" runat="server" OnClick="Xml_Click" Text="UnZipXML" />
                 <asp:Button ID="btnJson" runat="server" OnClick="Json_Click" Text="UnZipJson" />
                 <asp:Button ID="buttonCarpeta" runat="server" OnClick="carpeta_click" Text="Cargar Carpeta" />
+                <asp:Button ID="buttonTwitter" runat="server" OnClick="twitter_click" Text="Cargar tweets" />
             </div>
             <hr>
             <center><asp:FileUpload ID="FileUpload" runat="server" ></asp:FileUpload></center>

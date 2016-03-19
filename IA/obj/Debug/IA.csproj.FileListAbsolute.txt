@@ -69,3 +69,11 @@ C:\Users\Proyecto\Desktop\PrimerProyectoIA\IA\bin\Spire.License.dll
 C:\Users\Proyecto\Desktop\PrimerProyectoIA\IA\bin\Spire.Pdf.dll
 C:\Users\Proyecto\Desktop\PrimerProyectoIA\IA\bin\WatiN.Core.dll
 C:\Users\Proyecto\Desktop\PrimerProyectoIA\IA\bin\Ionic.Zip.dll
+C:\Users\Proyecto\Desktop\PrimerProyectoIA\IA\bin\Hammock.ClientProfile.dll
+C:\Users\Proyecto\Desktop\PrimerProyectoIA\IA\bin\Newtonsoft.Json.dll
+C:\Users\Proyecto\Desktop\PrimerProyectoIA\IA\bin\TweetSharp.dll
+C:\Users\Proyecto\Desktop\PrimerProyectoIA\IA\bin\Hammock.ClientProfile.pdb
+C:\Users\Proyecto\Desktop\PrimerProyectoIA\IA\bin\Newtonsoft.Json.xml
+C:\Users\Proyecto\Desktop\PrimerProyectoIA\IA\bin\TweetSharp.pdb
+C:\Users\Proyecto\Desktop\PrimerProyectoIA\IA\bin\Facebook.dll
+C:\Users\Proyecto\Desktop\PrimerProyectoIA\IA\bin\Facebook.xml

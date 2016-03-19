@@ -67,6 +67,15 @@ namespace IA {
         protected global::System.Web.UI.WebControls.Button buttonCarpeta;
         
         /// <summary>
+        /// Control buttonTwitter.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button buttonTwitter;
+        
+        /// <summary>
         /// Control FileUpload.
         /// </summary>
         /// <remarks>

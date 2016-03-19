@@ -6,6 +6,7 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.IO;
 using IA.Lecturas;
+using Facebook;
 
 namespace IA
 {
@@ -17,6 +18,7 @@ namespace IA
         UrlUploader GetUrl = new UrlUploader();
         getCarpeta GetFolder = new getCarpeta();
         UnzipJson GetJson = new UnzipJson();
+        Twitter GetTweets = new Twitter();
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -96,6 +98,14 @@ namespace IA
             }
         }
 
-
+        protected void twitter_click(object sender, EventArgs e)
+        {
+            if (text_area.Text != "" && text_area.Text != "Debe de ingresar algun texto para ser clasificado." &&
+                text_area.Text != "Debe ingresar una url." && text_area.Text != "Debe de ingresar algun texto para ser identificado." &&
+                text_area.Text != "Error no ha seleccionado un archivo o este esta vacio." && text_area.Text != "Error al cargar los archivos." && text_area.Text != "Formato de archivo no valido.")
+            {
+                text_area.Text = GetTweets.getTweet(text_area.Text.Split(' ')[0], Int32.Parse(text_area.Text.Split(' ')[1]));
+            }
+        }
     }
 }
