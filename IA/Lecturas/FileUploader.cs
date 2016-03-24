@@ -43,7 +43,7 @@ namespace IA.Lecturas
                         }
                     }
 
-                    else return "Error No ha seleccionado un archivo o este esta vacio.";
+                    else return "Error no ha seleccionado un archivo o este esta vacio.";
                 }
                 catch (Exception)
                 {
