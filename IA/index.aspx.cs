@@ -7,11 +7,13 @@ using System.Web.UI.WebControls;
 using System.IO;
 using IA.Lecturas;
 using Facebook;
+using IA.DataBaseContext;
 
 namespace IA
 {
     public partial class index : System.Web.UI.Page
     {
+        private IAContext db = new IAContext();
         UnzipXML UnzipXml = new UnzipXML();
         FileUploader FileU = new FileUploader();
         FileHtmlUpload FileH = new FileHtmlUpload();
@@ -22,7 +24,8 @@ namespace IA
 
         protected void Page_Load(object sender, EventArgs e)
         {
-
+            //para ver si la bd ya esta funcionando con la primer palabra
+            text_area.Text = db.Palabras.ToArray().ElementAt(0).palabra;
         }
 
         protected void CargarArchivo_Click(object sender, EventArgs e)
