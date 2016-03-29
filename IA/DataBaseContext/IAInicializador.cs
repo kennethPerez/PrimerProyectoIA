@@ -13,24 +13,24 @@ namespace IA.DataBaseContext
         {
             var categorias = new List<Categorias>
             {
-                new Categorias{Categoria="Deporte",categoriaID=0},
-                new Categorias{Categoria="Politica",categoriaID=1}
+                new Categorias{Categoria="Deporte"},
+                new Categorias{Categoria="Politica"}
             };
             categorias.ForEach(s => context.Categorias.Add(s));
             context.SaveChanges();
 
             var idiomas = new List<Idiomas>
             {
-                new Idiomas{Idioma="Ingles",idiomaID=0},
-                new Idiomas{Idioma="Espannol",idiomaID=1}
+                new Idiomas{Idioma="Ingles"},
+                new Idiomas{Idioma="Espannol"}
             };
             idiomas.ForEach(s => context.Idiomas.Add(s));
             context.SaveChanges();
 
             var palabras = new List<Palabras>
             {
-                new Palabras{palabra="Balon",palabraID=0,idiomaID=1,categoriaID=0},
-                new Palabras{palabra="Presidente",palabraID=1,idiomaID=1,categoriaID=1},
+                new Palabras{palabra="Balon",idiomaID=1,categoriaID=0},
+                new Palabras{palabra="Presidente",idiomaID=1,categoriaID=1},
             };
             palabras.ForEach(s => context.Palabras.Add(s));
             context.SaveChanges();
