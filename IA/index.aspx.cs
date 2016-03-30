@@ -8,6 +8,8 @@ using System.IO;
 using IA.Lecturas;
 using Facebook;
 using IA.DataBaseContext;
+using System.Dynamic;
+using System.Net;
 
 namespace IA
 {
@@ -24,8 +26,6 @@ namespace IA
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            //para ver si la bd ya esta funcionando con la primer palabra
-            text_area.Text = db.Palabras.ToArray().ElementAt(0).palabra;
         }
 
         protected void CargarArchivo_Click(object sender, EventArgs e)
@@ -72,12 +72,12 @@ namespace IA
 
         protected void Json_Click(object sender, EventArgs e)
         {
-            
+
             if (text_area.Text != "" && text_area.Text != "Debe de ingresar algun texto para ser clasificado." &&
                 text_area.Text != "Debe ingresar una url." && text_area.Text != "Debe de ingresar algun texto para ser identificado." &&
                 text_area.Text != "Error no ha seleccionado un archivo o este esta vacio." && text_area.Text != "Error al cargar los archivos." && text_area.Text != "Formato de archivo no valido.")
             {
-                text_area.Text = GetJson.UnzipJsonText(text_area.Text); 
+                text_area.Text = GetJson.UnzipJsonText(text_area.Text);
             }
         }
         protected void Xml_Click(object sender, EventArgs e)
@@ -90,7 +90,7 @@ namespace IA
                 text_area.Text = UnzipXml.UnzipXml(text_area.Text);
             }
         }
-        
+
         protected void carpeta_click(object sender, EventArgs e)
         {
             if (text_area.Text != "" && text_area.Text != "Debe de ingresar algun texto para ser clasificado." &&
@@ -109,6 +109,6 @@ namespace IA
             {
                 text_area.Text = GetTweets.getTweet(text_area.Text.Split(' ')[0], Int32.Parse(text_area.Text.Split(' ')[1]));
             }
-        }
+        }        
     }
 }

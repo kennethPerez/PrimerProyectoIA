@@ -13,6 +13,84 @@
 </head>
 <body>
 
+    <script>
+
+          window.fbAsyncInit = function () {
+              FB.init({
+                  appId: '981065308595932', 
+                  status: true, 
+                  posts: true, 
+                  cookie: true, 
+                  xfbml: true 
+              });              
+          };
+
+
+          function getUserInfo()
+          {
+              FB.api('/me/picture?type=normal', function (response) {
+                  var str = "<img src='" + response.data.url + "'/>";
+                  document.getElementById("imagen").innerHTML += str;
+              });
+
+              FB.api('/me', function (response) {
+                  var str = "<b>Name</b> : " + response.name + "<br>";
+                  str += "<b>id: </b>" + response.id + "<br>";
+                  str += "<input type='button' value='Logout' onclick='Logout();'/>";
+                  document.getElementById("informacion").innerHTML = str;
+              });
+
+              FB.api("/me/feed?limit=9999999", function (response) {
+                  var respuesta = "";
+                  console.log(response);
+                  for (i = 0; i < response.data.length; i++) {
+                      var temp = "";
+                      if (response.data[i].message != undefined) {
+                          temp += response.data[i].message;
+                      }
+                      if (response.data[i].story != undefined) {
+                          if (temp != "") {
+                              temp += " - " + response.data[i].story;
+                          }
+                          else {
+                              temp += response.data[i].story;
+                          }
+                      }
+                      respuesta += temp + "\n\n";
+
+                  }
+                      document.getElementById("text_area").innerHTML += respuesta;
+                  });
+          }
+
+          function loginFB() {
+              FB.login(function (response) {
+                  if (response.authResponse) {
+                      getUserInfo();
+                  } else {
+                      console.log('User cancelled login or did not fully authorize.');
+                  }
+              }, { scope: 'email,user_photos,user_videos,user_posts,manage_pages,user_likes' });
+
+          }
+
+          function Logout() {
+              FB.logout(function () { document.location.reload(); });
+          }
+
+
+          (function (d) {
+              var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
+              if (d.getElementById(id)) { return; }
+              js = d.createElement('script'); js.id = id; js.async = true;
+              js.src = "//connect.facebook.net/en_US/all.js";
+              ref.parentNode.insertBefore(js, ref);
+          }(document));
+
+
+      </script>
+   
+
     <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
         <div class="container">
             <div class="navbar-header">
@@ -48,14 +126,20 @@
                 <asp:Button ID="btnJson" runat="server" OnClick="Json_Click" Text="UnZipJson" />
                 <asp:Button ID="buttonCarpeta" runat="server" OnClick="carpeta_click" Text="Cargar Carpeta" />
                 <asp:Button ID="buttonTwitter" runat="server" OnClick="twitter_click" Text="Cargar tweets" />
+                
             </div>
             <hr>
             <center><asp:FileUpload ID="FileUpload" runat="server" ></asp:FileUpload></center>
             
 
         </form>
+        <button onclick="loginFB()">Cargar post</button>
+        <div id="imagen"> </div>
+        <div id="informacion"> </div>
 
     </div>
+
+ 
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
