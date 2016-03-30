@@ -21,13 +21,13 @@
                   status: true, 
                   posts: true, 
                   cookie: true, 
-                  xfbml: true 
+                  xfbml: true,
+                  version: 'v2.5'
               });              
           };
 
 
-          function getUserInfo()
-          {
+          function getUserInfo() {
               FB.api('/me/picture?type=normal', function (response) {
                   var str = "<img src='" + response.data.url + "'/>";
                   document.getElementById("imagen").innerHTML += str;
@@ -59,18 +59,23 @@
                       respuesta += temp + "\n\n";
 
                   }
-                      document.getElementById("text_area").innerHTML += respuesta;
-                  });
+                  document.getElementById("text_area").innerHTML += respuesta;
+              });
           }
 
           function loginFB() {
-              FB.login(function (response) {
+              FB.login(function (response)
+              {
                   if (response.authResponse) {
                       getUserInfo();
                   } else {
                       console.log('User cancelled login or did not fully authorize.');
                   }
-              }, { scope: 'email,user_photos,user_videos,user_posts,manage_pages,user_likes' });
+              },
+              {
+                  scope: 'email, user_photos, user_posts',
+                  auth_type: 'rerequest'
+              });
 
           }
 
@@ -107,7 +112,7 @@
                 <ul class="nav navbar-nav">
                     <li><a href="#">Analisis de Texto</a></li>
                 </ul>
-            </div><!--.nav-collapse -->
+            </div>
         </div>
     </nav>
 
