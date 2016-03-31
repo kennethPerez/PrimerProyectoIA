@@ -131,6 +131,7 @@
                 <asp:Button ID="btnJson" runat="server" OnClick="Json_Click" Text="UnZipJson" />
                 <asp:Button ID="buttonCarpeta" runat="server" OnClick="carpeta_click" Text="Cargar Carpeta" />
                 <asp:Button ID="buttonTwitter" runat="server" OnClick="twitter_click" Text="Cargar tweets" />
+                <asp:Button ID="button1" runat="server" OnClick="categorizar" Text="prueba categorizacion" />
                 
             </div>
             <hr>
