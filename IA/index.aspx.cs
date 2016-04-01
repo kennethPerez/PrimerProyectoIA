@@ -38,15 +38,21 @@ namespace IA
         }
 
         public void idioma_click(object sender, EventArgs e) {
+            if (text_area.Text != "" && text_area.Text != "Debe de ingresar algun texto para ser clasificado." &&
+                text_area.Text != "Debe ingresar una url." && text_area.Text != "Debe de ingresar algun texto para ser identificado." &&
+                text_area.Text != "Error no ha seleccionado un archivo o este esta vacio." && text_area.Text != "Error al cargar los archivos." && text_area.Text != "Formato de archivo no valido.")
+            {
+                string Idioma = languageDetector.classifier(text_area.Text);
+                language.Text = "El idioma detectado es: " + Idioma;
 
-            string Idioma = languageDetector.classifier(text_area.Text);
-            language.Text = "El idioma detectado es: "+Idioma;
+                DataTable result = LanguageDetector.DictionaryToDatatable(languageDetector.DictText);
+                DataTable origin = LanguageDetector.DictionaryToDatatable(languageDetector.GetDictionary(Idioma));
 
-            DataTable result = LanguageDetector.DictionaryToDatatable(languageDetector.DictText);
-            DataTable origin = LanguageDetector.DictionaryToDatatable(languageDetector.GetDictionary(Idioma));
-
-            ltResult.Text = DrawChartResult.BindChart(result, "chartResult", "Frecuencia de letras en el texto", "Letras");
-            ltBase.Text = DrawChartBase.BindChart(origin, "chartBase", "Frecuencia del idiama "+Idioma, "Letras");
+                ltResult.Text = DrawChartResult.BindChart(result, "chartResult", "Frecuencia de letras en el texto", "Letras");
+                ltBase.Text = DrawChartBase.BindChart(origin, "chartBase", "Frecuencia del idiama " + Idioma, "Letras");
+            }
+            else
+                text_area.Text = "Debe ingresar un texto para poder detectar el idioma.";
         }
 
         protected void CargarArchivo_Click(object sender, EventArgs e)
