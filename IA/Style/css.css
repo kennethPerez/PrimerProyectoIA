@@ -9,6 +9,14 @@
     margin-top: 2%;
 }
 
+.sitegrafs {
+    width: 100vw;
+    height: 90vh;
+	margin: auto;    
+    padding-left:3vw; 
+    padding-right:1vw; 
+}
+
 .texteditor {
     width:100%;
     height:70vh;
@@ -17,6 +25,23 @@
     padding:1%;
 }
 
+.chartR {
+    float:left;
+	margin: auto;
+    width:105px;
+    height:24px;
+    padding-left:3vw; 
+    padding-right:1vw; 
+}
+
+.chartB {
+    float:left;
+	margin: auto;
+    width:135px;
+    height:21px;
+    padding-left:3vw; 
+    padding-right:1vw; 
+}
 
 
 .file-upload {

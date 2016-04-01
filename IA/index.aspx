@@ -10,6 +10,8 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css">
     <style>body{padding-top:50px;}.starter-template{padding:40px 15px;text-align:center;}</style>
     <link rel="stylesheet" type="text/css" href="~/Style/css.css" media="all" />
+
+    <script type="text/javascript" src="//www.google.com/jsapi"></script>
 </head>
 <body>
 
@@ -116,9 +118,9 @@
         </div>
     </nav>
 
-    <div class="container">
-        
-        <form id="form1" runat="server">
+    <form id="form1" runat="server">
+
+    <div class="container">      
 
             <div class="Text-Area">    
                 <asp:TextBox ID="text_area" runat="server" class="texteditor" TextMode="MultiLine"></asp:TextBox>
@@ -131,23 +133,32 @@
                 <asp:Button ID="btnJson" runat="server" OnClick="Json_Click" Text="UnZipJson" />
                 <asp:Button ID="buttonCarpeta" runat="server" OnClick="carpeta_click" Text="Cargar Carpeta" />
                 <asp:Button ID="buttonTwitter" runat="server" OnClick="twitter_click" Text="Cargar tweets" />
-                <asp:Button ID="button1" runat="server" OnClick="categorizar" Text="prueba categorizacion" />
+                <asp:Button ID="buttonLanguage" runat="server" OnClick="idioma_click" Text="Detectar Idioma" />
+                <asp:Button ID="buttonNaiveBayes" runat="server" OnClick="categorizar" Text="prueba categorizacion" />
                 
             </div>
             <hr>
             <center><asp:FileUpload ID="FileUpload" runat="server" ></asp:FileUpload></center>
             
 
-        </form>
         <button onclick="loginFB()">Cargar post</button>
         <div id="imagen"> </div>
         <div id="informacion"> </div>
+        <br>
+        <br>       
 
-    </div>
-
+        </div>
+                <asp:Label Font-Size="Large" ForeColor="#5c7fa0" ID="language" runat="server"></asp:Label>
+                <div class="sitegrafs">
+                    <div id="chartResult" class="chartR">  <asp:Literal ID="ltResult" runat="server"></asp:Literal></div>
+                    <br>
+                    <br>
+                    <div id="chartBase" class="chartB">  <asp:Literal ID="ltBase" runat="server"></asp:Literal></div>
+                </div>    
+    </form>   
  
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>    
 </body>
 </html>

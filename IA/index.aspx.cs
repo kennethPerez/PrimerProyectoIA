@@ -11,12 +11,15 @@ using IA.DataBaseContext;
 using System.Dynamic;
 using System.Net;
 using IA.bayes_algoritmo;
+using IA.detectarIdioma;
+using System.Data;
 
 namespace IA
 {
     public partial class index : System.Web.UI.Page
     {
         private IAContext db = new IAContext();
+
         UnzipXML UnzipXml = new UnzipXML();
         FileUploader FileU = new FileUploader();
         FileHtmlUpload FileH = new FileHtmlUpload();
@@ -25,8 +28,25 @@ namespace IA
         UnzipJson GetJson = new UnzipJson();
         Twitter GetTweets = new Twitter();
 
+        LanguageDetector languageDetector = new LanguageDetector();
+        DrawChart DrawChartResult = new DrawChart();
+        DrawChart DrawChartBase = new DrawChart();
+
+
         protected void Page_Load(object sender, EventArgs e)
         {
+        }
+
+        public void idioma_click(object sender, EventArgs e) {
+
+            string Idioma = languageDetector.classifier(text_area.Text);
+            language.Text = "El idioma detectado es: "+Idioma;
+
+            DataTable result = LanguageDetector.DictionaryToDatatable(languageDetector.DictText);
+            DataTable origin = LanguageDetector.DictionaryToDatatable(languageDetector.GetDictionary(Idioma));
+
+            ltResult.Text = DrawChartResult.BindChart(result, "chartResult", "Frecuencia de letras en el texto", "Letras");
+            ltBase.Text = DrawChartBase.BindChart(origin, "chartBase", "Frecuencia del idiama "+Idioma, "Letras");
         }
 
         protected void CargarArchivo_Click(object sender, EventArgs e)
