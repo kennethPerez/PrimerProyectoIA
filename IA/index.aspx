@@ -95,8 +95,7 @@
           }(document));
 
 
-      </script>
-   
+      </script>   
 
     <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
         <div class="container">
@@ -109,54 +108,49 @@
                 </button>
                 <a class="navbar-brand" href="#">I Proyecto IA</a>
             </div>
-
-            <div class="collapse navbar-collapse">
-                <ul class="nav navbar-nav">
-                    <li><a href="#">Analisis de Texto</a></li>
-                </ul>
-            </div>
         </div>
     </nav>
 
-    <form id="form1" runat="server">
+    <div class="container">
+        
+        <center>
+            <br>
+            <button onclick="loginFB()">Cargar post</button>
+            <div id="imagen"> </div>
+            <div id="informacion"> 
+        </center>
 
-    <div class="container">      
-
-            <div class="Text-Area">    
-                <asp:TextBox ID="text_area" runat="server" class="texteditor" TextMode="MultiLine"></asp:TextBox>
-            </div>
-            <div class="intro">
-                <asp:Button runat="server" Text="Cargar Archivo" OnClick="CargarArchivo_Click" />
-                <asp:Button runat="server" Text="Cargar Html" OnClick="HtmlFile_Click" />
-                <asp:Button ID="ParseURL" runat="server" OnClick="ParseURL_Click" Text="Cargar URL" />
-                <asp:Button ID="btnXml" runat="server" OnClick="Xml_Click" Text="UnZipXML" />
-                <asp:Button ID="btnJson" runat="server" OnClick="Json_Click" Text="UnZipJson" />
-                <asp:Button ID="buttonCarpeta" runat="server" OnClick="carpeta_click" Text="Cargar Carpeta" />
-                <asp:Button ID="buttonTwitter" runat="server" OnClick="twitter_click" Text="Cargar tweets" />
-                <asp:Button ID="buttonLanguage" runat="server" OnClick="idioma_click" Text="Detectar Idioma" />
-                <asp:Button ID="buttonNaiveBayes" runat="server" OnClick="categorizar" Text="prueba categorizacion" />
-                
-            </div>
+        <form id="form1" runat="server">
+            <br>
+            <center>
+                <div class="intro">
+                    <asp:Button runat="server" Text="Cargar Archivo" OnClick="CargarArchivo_Click" />
+                    <asp:Button runat="server" Text="Cargar Html" OnClick="HtmlFile_Click" />
+                    <asp:Button ID="ParseURL" runat="server" OnClick="ParseURL_Click" Text="Cargar URL" />
+                    <asp:Button ID="btnXml" runat="server" OnClick="Xml_Click" Text="UnZipXML" />
+                    <asp:Button ID="btnJson" runat="server" OnClick="Json_Click" Text="UnZipJson" />
+                    <asp:Button ID="buttonCarpeta" runat="server" OnClick="carpeta_click" Text="Cargar Carpeta" />
+                    <asp:Button ID="buttonTwitter" runat="server" OnClick="twitter_click" Text="Cargar tweets" />
+                    <asp:Button ID="buttonLanguage" runat="server" OnClick="idioma_click" Text="Detectar Idioma" />
+                    <asp:Button ID="buttonNaiveBayes" runat="server" OnClick="categorizar" Text="prueba categorizacion" />                
+                </div>
+            </center>
             <hr>
             <center><asp:FileUpload ID="FileUpload" runat="server" ></asp:FileUpload></center>
+          
+            <hr>
+            <div class="Text-Area">    
+                <asp:TextBox ID="text_area" runat="server" class="texteditor" TextMode="MultiLine"></asp:TextBox>
+            </div>           
             
-
-        <button onclick="loginFB()">Cargar post</button>
-        <div id="imagen"> </div>
-        <div id="informacion"> </div>
-        <br>
-        <br>       
-
-        </div>
-                <asp:Label Font-Size="Large" ForeColor="#5c7fa0" ID="language" runat="server"></asp:Label>
-                <div class="sitegrafs">
-                    <div id="chartResult" class="chartR">  <asp:Literal ID="ltResult" runat="server"></asp:Literal></div>
-                    <br>
-                    <br>
-                    <div id="chartBase" class="chartB">  <asp:Literal ID="ltBase" runat="server"></asp:Literal></div>
-                </div>    
-    </form>   
- 
+            <hr>
+            <asp:Label Font-Size="Large" ForeColor="#5c7fa0" ID="language" runat="server"></asp:Label>
+            <div class="col-md-12">
+                <div id="chartResult" class="col-md-6">  <asp:Literal ID="ltResult" runat="server"></asp:Literal></div>                    
+                <div id="chartBase" class="col-md-6">  <asp:Literal ID="ltBase" runat="server"></asp:Literal></div>
+            </div>    
+            <hr>
+        </form>   
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>    

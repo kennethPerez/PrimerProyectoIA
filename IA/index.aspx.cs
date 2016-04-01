@@ -175,7 +175,7 @@ namespace IA
             categorias.Add(new bayesCategoria("sucesos", new List<bayesPalabra>()));
 
 
-            string texto = "ARMA RELIGION Computacion";
+            string texto = "La tecnologia tecnologia tecnologia tecnologia utilizando un celular en la religion";
 
             Console.WriteLine("Texto: " + texto.ToLower() + "\n");
 
