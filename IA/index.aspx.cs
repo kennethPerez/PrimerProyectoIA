@@ -60,6 +60,7 @@ namespace IA
             HttpFileCollection archivos = Request.Files;
 
             text_area.Text = FileU.cargarArchivos(archivos);
+
         }
 
         protected void HtmlFile_Click(object sender, EventArgs e)
