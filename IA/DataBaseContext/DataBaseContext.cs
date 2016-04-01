@@ -11,9 +11,9 @@ namespace IA.DataBaseContext
         {
         }
 
-        public DbSet<Categorias> Categorias { get; set; }
+        public DbSet<muestra> muestra { get; set; }
         public DbSet<Idiomas> Idiomas { get; set; }
-        public DbSet<Palabras> Palabras { get; set; }
+        public DbSet<Palabras> palabras { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

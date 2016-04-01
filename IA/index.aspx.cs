@@ -10,6 +10,7 @@ using Facebook;
 using IA.DataBaseContext;
 using System.Dynamic;
 using System.Net;
+using IA.bayes_algoritmo;
 
 namespace IA
 {
@@ -68,6 +69,104 @@ namespace IA
                 text_area.Text = array[0];
             }
             else text_area.Text = "Debe ingresar una url.";
+        }
+        protected void categorizar(object sender, EventArgs e)
+        {
+
+            List<bayesCategoria> data = new List<bayesCategoria>();
+
+            List<bayesPalabra> t1 = new List<bayesPalabra>();
+            List<bayesPalabra> t2 = new List<bayesPalabra>();
+
+            List<bayesPalabra> r1 = new List<bayesPalabra>();
+            List<bayesPalabra> r2 = new List<bayesPalabra>();
+
+            List<bayesPalabra> s1 = new List<bayesPalabra>();
+            List<bayesPalabra> s2 = new List<bayesPalabra>();
+
+            t1.Add(new bayesPalabra("tecnologia", 2));
+            t1.Add(new bayesPalabra("computacion", 2));
+            t1.Add(new bayesPalabra("biblia", 0));
+            t1.Add(new bayesPalabra("religion", 1));
+            t1.Add(new bayesPalabra("asesino", 1));
+            t1.Add(new bayesPalabra("arma", 0));
+            t1.Add(new bayesPalabra("celular", 2));
+            t1.Add(new bayesPalabra("muerte", 1));
+
+            t2.Add(new bayesPalabra("tecnologia", 3));
+            t2.Add(new bayesPalabra("computacion", 3));
+            t2.Add(new bayesPalabra("biblia", 1));
+            t2.Add(new bayesPalabra("religion", 0));
+            t2.Add(new bayesPalabra("asesino", 0));
+            t2.Add(new bayesPalabra("arma", 1));
+            t2.Add(new bayesPalabra("celular", 3));
+            t2.Add(new bayesPalabra("muerte", 0));
+
+            data.Add(new bayesCategoria("Tecnologia", t1));
+            data.Add(new bayesCategoria("Tecnologia", t2));
+
+
+            r1.Add(new bayesPalabra("tecnologia", 1));
+            r1.Add(new bayesPalabra("computacion", 1));
+            r1.Add(new bayesPalabra("biblia", 2));
+            r1.Add(new bayesPalabra("religion", 2));
+            r1.Add(new bayesPalabra("asesino", 1));
+            r1.Add(new bayesPalabra("arma", 1));
+            r1.Add(new bayesPalabra("celular", 1));
+            r1.Add(new bayesPalabra("muerte", 2));
+
+            r2.Add(new bayesPalabra("tecnologia", 0));
+            r2.Add(new bayesPalabra("computacion", 0));
+            r2.Add(new bayesPalabra("biblia", 3));
+            r2.Add(new bayesPalabra("religion", 3));
+            r2.Add(new bayesPalabra("asesino", 0));
+            r2.Add(new bayesPalabra("arma", 0));
+            r2.Add(new bayesPalabra("celular", 0));
+            r2.Add(new bayesPalabra("muerte", 1));
+
+            data.Add(new bayesCategoria("religion", r1));
+            data.Add(new bayesCategoria("religion", r2));
+
+            s1.Add(new bayesPalabra("tecnologia", 1));
+            s1.Add(new bayesPalabra("computacion", 1));
+            s1.Add(new bayesPalabra("biblia", 1));
+            s1.Add(new bayesPalabra("religion", 1));
+            s1.Add(new bayesPalabra("asesino", 2));
+            s1.Add(new bayesPalabra("arma", 2));
+            s1.Add(new bayesPalabra("celular", 1));
+            s1.Add(new bayesPalabra("muerte", 2));
+
+            s2.Add(new bayesPalabra("tecnologia", 0));
+            s2.Add(new bayesPalabra("computacion", 0));
+            s2.Add(new bayesPalabra("biblia", 0));
+            s2.Add(new bayesPalabra("religion", 0));
+            s2.Add(new bayesPalabra("asesino", 3));
+            s2.Add(new bayesPalabra("arma", 1));
+            s2.Add(new bayesPalabra("celular", 0));
+            s2.Add(new bayesPalabra("muerte", 3));
+
+            data.Add(new bayesCategoria("sucesos", s1));
+            data.Add(new bayesCategoria("sucesos", s2));
+
+
+            List<bayesCategoria> categorias = new List<bayesCategoria>();
+            categorias.Add(new bayesCategoria("Tecnologia", new List<bayesPalabra>()));
+            categorias.Add(new bayesCategoria("religion", new List<bayesPalabra>()));
+            categorias.Add(new bayesCategoria("sucesos", new List<bayesPalabra>()));
+
+
+            string texto = "ARMA RELIGION Computacion";
+
+            Console.WriteLine("Texto: " + texto.ToLower() + "\n");
+
+            Respuesta Finalresult = new NaiveBayes(data, categorias, texto.ToLower()).classifier();
+            string concat="";
+            foreach (ResultNaiveBayes r in Finalresult.listaDeProbabilidadesFinales)
+            {
+                concat+=r.categoria + " = " + r.probabilidad * 100 + "%\n";
+            }
+            text_area.Text = concat;
+
         }
 
         protected void Json_Click(object sender, EventArgs e)

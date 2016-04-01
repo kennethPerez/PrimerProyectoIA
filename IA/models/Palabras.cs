@@ -12,9 +12,21 @@ namespace IA.models
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int palabraID { get; set; }
-        public string palabra { get; set; }
-        public int idiomaID { get; set; }
-        public int categoriaID { get; set; }
-
+        public string palabra;
+        public double frecuencia;
+        public int IDdioma;
+        public double calculateMedia;
+        public double calculateVarianza;
+        public Palabras(string palabra, double frecuencia)
+        {
+            this.frecuencia = frecuencia;
+            this.palabra = palabra;
+        }
+        public Palabras(string palabra, double calculateMedia, double calculateVarianza)
+        {
+            this.palabra = palabra;
+            this.calculateMedia = calculateMedia;
+            this.calculateVarianza = calculateVarianza;
+        }
     }
 }
