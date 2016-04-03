@@ -35,6 +35,9 @@ namespace IA
 
         protected void Page_Load(object sender, EventArgs e)
         {
+            /*System.Data.Entity.Database.SetInitializer(new IAInicializador());
+            IAContext db = new IAContext();
+            db.Database.Initialize(true);*/
         }
 
         public void idioma_click(object sender, EventArgs e) {
@@ -101,86 +104,35 @@ namespace IA
         {
 
             List<bayesCategoria> data = new List<bayesCategoria>();
+            
+            var query = from a in db.muestra join b in db.relacion on a.muestrasID equals b.muestraID join c in db.palabras on b.palabraID equals c.palabraID where c.IDdioma == a.IDdioma select new { muestra = a.muestrasID ,categoria = a.categoria, palabra = c.palabra , frecuencia = b.frecuencia  } ;
 
-            List<bayesPalabra> t1 = new List<bayesPalabra>();
-            List<bayesPalabra> t2 = new List<bayesPalabra>();
+           
+            foreach (var jsonResult in query)
+            {
+                res respuesta = estaEnLista(data, jsonResult.muestra);
+                if (respuesta.boolean)  //si ya existe en la lista
+                {
+                    data.ElementAt(respuesta.index).palabra.Add(new bayesPalabra(jsonResult.palabra, jsonResult.frecuencia));
+                }
+                else     //sino existe
+                {
+                    List<bayesPalabra> lista =new List<bayesPalabra>();
+                    lista.Add(new bayesPalabra(jsonResult.palabra, jsonResult.frecuencia));
+                    data.Add(new bayesCategoria(jsonResult.categoria, lista, jsonResult.muestra));
 
-            List<bayesPalabra> r1 = new List<bayesPalabra>();
-            List<bayesPalabra> r2 = new List<bayesPalabra>();
+                }
 
-            List<bayesPalabra> s1 = new List<bayesPalabra>();
-            List<bayesPalabra> s2 = new List<bayesPalabra>();
-
-            t1.Add(new bayesPalabra("tecnologia", 2));
-            t1.Add(new bayesPalabra("computacion", 2));
-            t1.Add(new bayesPalabra("biblia", 0));
-            t1.Add(new bayesPalabra("religion", 1));
-            t1.Add(new bayesPalabra("asesino", 1));
-            t1.Add(new bayesPalabra("arma", 0));
-            t1.Add(new bayesPalabra("celular", 2));
-            t1.Add(new bayesPalabra("muerte", 1));
-
-            t2.Add(new bayesPalabra("tecnologia", 3));
-            t2.Add(new bayesPalabra("computacion", 3));
-            t2.Add(new bayesPalabra("biblia", 1));
-            t2.Add(new bayesPalabra("religion", 0));
-            t2.Add(new bayesPalabra("asesino", 0));
-            t2.Add(new bayesPalabra("arma", 1));
-            t2.Add(new bayesPalabra("celular", 3));
-            t2.Add(new bayesPalabra("muerte", 0));
-
-            data.Add(new bayesCategoria("Tecnologia", t1));
-            data.Add(new bayesCategoria("Tecnologia", t2));
-
-
-            r1.Add(new bayesPalabra("tecnologia", 1));
-            r1.Add(new bayesPalabra("computacion", 1));
-            r1.Add(new bayesPalabra("biblia", 2));
-            r1.Add(new bayesPalabra("religion", 2));
-            r1.Add(new bayesPalabra("asesino", 1));
-            r1.Add(new bayesPalabra("arma", 1));
-            r1.Add(new bayesPalabra("celular", 1));
-            r1.Add(new bayesPalabra("muerte", 2));
-
-            r2.Add(new bayesPalabra("tecnologia", 0));
-            r2.Add(new bayesPalabra("computacion", 0));
-            r2.Add(new bayesPalabra("biblia", 3));
-            r2.Add(new bayesPalabra("religion", 3));
-            r2.Add(new bayesPalabra("asesino", 0));
-            r2.Add(new bayesPalabra("arma", 0));
-            r2.Add(new bayesPalabra("celular", 0));
-            r2.Add(new bayesPalabra("muerte", 1));
-
-            data.Add(new bayesCategoria("religion", r1));
-            data.Add(new bayesCategoria("religion", r2));
-
-            s1.Add(new bayesPalabra("tecnologia", 1));
-            s1.Add(new bayesPalabra("computacion", 1));
-            s1.Add(new bayesPalabra("biblia", 1));
-            s1.Add(new bayesPalabra("religion", 1));
-            s1.Add(new bayesPalabra("asesino", 2));
-            s1.Add(new bayesPalabra("arma", 2));
-            s1.Add(new bayesPalabra("celular", 1));
-            s1.Add(new bayesPalabra("muerte", 2));
-
-            s2.Add(new bayesPalabra("tecnologia", 0));
-            s2.Add(new bayesPalabra("computacion", 0));
-            s2.Add(new bayesPalabra("biblia", 0));
-            s2.Add(new bayesPalabra("religion", 0));
-            s2.Add(new bayesPalabra("asesino", 3));
-            s2.Add(new bayesPalabra("arma", 1));
-            s2.Add(new bayesPalabra("celular", 0));
-            s2.Add(new bayesPalabra("muerte", 3));
-
-            data.Add(new bayesCategoria("sucesos", s1));
-            data.Add(new bayesCategoria("sucesos", s2));
-
-
+            }
+            
             List<bayesCategoria> categorias = new List<bayesCategoria>();
-            categorias.Add(new bayesCategoria("Tecnologia", new List<bayesPalabra>()));
-            categorias.Add(new bayesCategoria("religion", new List<bayesPalabra>()));
-            categorias.Add(new bayesCategoria("sucesos", new List<bayesPalabra>()));
+            var result = db.muestra.Select(m => m.categoria).Distinct();
 
+            foreach (string categoria in result)
+            {
+                categorias.Add(new bayesCategoria(categoria, new List<bayesPalabra>()));
+            }
+                       
 
             string texto = "La tecnologia tecnologia tecnologia tecnologia utilizando un celular en la religion";
 
@@ -196,6 +148,29 @@ namespace IA
 
         }
 
+        private class res
+        {
+            public bool boolean;
+            public int index;
+            public res(bool b, int t)
+            {
+                this.boolean = b;
+                this.index = t;
+            }
+        }
+
+
+        private res estaEnLista(List<bayesCategoria> data,int muestraID)
+        {
+            for (int i = 0; i < data.Count; i++)
+            {
+                if (data.ElementAt(i).muestraId == muestraID)
+                {
+                    return new res(true, i);
+                }
+            }
+            return new res(false,0);
+        }
         protected void Json_Click(object sender, EventArgs e)
         {
 

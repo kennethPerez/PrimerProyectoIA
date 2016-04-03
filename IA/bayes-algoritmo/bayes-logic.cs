@@ -171,10 +171,17 @@ namespace IA.bayes_algoritmo
         public string categoria;
         public List<bayesPalabra> palabra;
         public List<List<bayesPalabra>> listaDelistasDepalabras = new List<List<bayesPalabra>>();//para mejorar rendimiento perder memoria
+        public int muestraId;
         public bayesCategoria(string categoria, List<bayesPalabra> palabra)
         {
             this.categoria = categoria;
             this.palabra = palabra;
+        }
+        public bayesCategoria(string categoria, List<bayesPalabra> palabra,int muestraId)
+        {
+            this.categoria = categoria;
+            this.palabra = palabra;
+            this.muestraId = muestraId;
         }
 
     }
