@@ -12,14 +12,8 @@ namespace IA.models
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int muestrasID { get; set; }
-        public string categoria;
-        public int IDdioma;
-        public List<Palabras> palabra;
-        public List<List<Palabras>> listaDelistasDepalabras = new List<List<Palabras>>();//para mejorar rendimiento perder memoria
-        public muestra(string categoria, List<Palabras> palabra)
-        {
-            this.categoria = categoria;
-            this.palabra = palabra;
-        }
+        public string categoria { get; set; }
+        public int IDdioma { get; set; }
+        
     }
 }

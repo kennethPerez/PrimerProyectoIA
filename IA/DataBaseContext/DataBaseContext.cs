@@ -14,7 +14,7 @@ namespace IA.DataBaseContext
         public DbSet<muestra> muestra { get; set; }
         public DbSet<Idiomas> Idiomas { get; set; }
         public DbSet<Palabras> palabras { get; set; }
-
+        public DbSet<relacion> relacion { get; set; }
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
