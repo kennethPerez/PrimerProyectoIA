@@ -177,3 +177,7 @@ C:\Users\Proyecto Movil\Desktop\PrimerProyectoIA\IA\bin\TweetSharp.pdb
 C:\Users\Proyecto Movil\Desktop\PrimerProyectoIA\IA\obj\Debug\IA.dll
 C:\Users\Proyecto Movil\Desktop\PrimerProyectoIA\IA\obj\Debug\IA.pdb
 C:\Users\Proyecto Movil\Desktop\PrimerProyectoIA\IA\obj\Debug\IA.csprojResolveAssemblyReference.cache
+C:\Users\Proyecto\Desktop\PrimerProyectoIA\IA\bin\EntityFramework.dll
+C:\Users\Proyecto\Desktop\PrimerProyectoIA\IA\bin\EntityFramework.SqlServer.dll
+C:\Users\Proyecto\Desktop\PrimerProyectoIA\IA\bin\EntityFramework.xml
+C:\Users\Proyecto\Desktop\PrimerProyectoIA\IA\bin\EntityFramework.SqlServer.xml
