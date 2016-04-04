@@ -35,9 +35,9 @@ namespace IA
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            /*System.Data.Entity.Database.SetInitializer(new IAInicializador());
+            System.Data.Entity.Database.SetInitializer(new IAInicializador());
             IAContext db = new IAContext();
-            db.Database.Initialize(true);*/
+            db.Database.Initialize(true);
         }
 
         public void idioma_click(object sender, EventArgs e) {

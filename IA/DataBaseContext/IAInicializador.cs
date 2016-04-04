@@ -7,7 +7,7 @@ using IA.models;
 
 namespace IA.DataBaseContext
 {
-    public class IAInicializador : DropCreateDatabaseIfModelChanges<IAContext>
+    public class IAInicializador : DropCreateDatabaseAlways<IAContext>
     {
         protected override void Seed(IAContext context)
         {

@@ -181,3 +181,4 @@ C:\Users\Proyecto\Desktop\PrimerProyectoIA\IA\bin\EntityFramework.dll
 C:\Users\Proyecto\Desktop\PrimerProyectoIA\IA\bin\EntityFramework.SqlServer.dll
 C:\Users\Proyecto\Desktop\PrimerProyectoIA\IA\bin\EntityFramework.xml
 C:\Users\Proyecto\Desktop\PrimerProyectoIA\IA\bin\EntityFramework.SqlServer.xml
+C:\Users\Proyecto Movil\Desktop\PrimerProyectoIA\IA\bin\ICSharpCode.SharpZipLib.dll
