@@ -132,7 +132,8 @@
                     <asp:Button ID="buttonCarpeta" runat="server" OnClick="carpeta_click" Text="Cargar Carpeta" />
                     <asp:Button ID="buttonTwitter" runat="server" OnClick="twitter_click" Text="Cargar tweets" />
                     <asp:Button ID="buttonLanguage" runat="server" OnClick="idioma_click" Text="Detectar Idioma" />
-                    <asp:Button ID="buttonNaiveBayes" runat="server" OnClick="categorizar" Text="prueba categorizacion" />                
+                    <asp:Button ID="buttonNaiveBayes" runat="server" OnClick="categorizar" Text="prueba categorizacion" /> 
+                    <asp:Button ID="button1" runat="server" OnClick="aprender" Text="Aprender sin categorizar" />               
                 </div>
             </center>
             <hr>

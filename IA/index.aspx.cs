@@ -19,7 +19,7 @@ namespace IA
     public partial class index : System.Web.UI.Page
     {
         private IAContext db = new IAContext();
-
+        IA.aprender.Aprender aprendizaje = new IA.aprender.Aprender();
         UnzipXML UnzipXml = new UnzipXML();
         FileUploader FileU = new FileUploader();
         FileHtmlUpload FileH = new FileHtmlUpload();
@@ -65,6 +65,14 @@ namespace IA
             text_area.Text = FileU.cargarArchivos(archivos);
 
         }
+        protected void aprender(object sender, EventArgs e)
+        {
+
+            text_area.Text += aprendizaje.aprender(text_area.Text, 1, "Tecnologia");
+
+        }
+
+       
 
         protected void HtmlFile_Click(object sender, EventArgs e)
         {
