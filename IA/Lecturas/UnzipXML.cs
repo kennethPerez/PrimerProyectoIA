@@ -5,6 +5,8 @@ using System.Web;
 using System.Xml;
 using Ionic.Zip;
 using System.Windows.Forms;
+using System.IO;
+using ICSharpCode.SharpZipLib.BZip2;
 
 namespace IA.Lecturas
 {
@@ -15,29 +17,52 @@ namespace IA.Lecturas
 
             string zipToUnpack = @path;
             string unpackDirectory = @"C:\IA\Comprimido";
-            using (ZipFile zip1 = ZipFile.Read(zipToUnpack))
+
+            try
             {
-                foreach (ZipEntry e in zip1)
+                using (ZipFile zip1 = ZipFile.Read(zipToUnpack))
                 {
-                    e.Extract(unpackDirectory, ExtractExistingFileAction.OverwriteSilently);
+                    foreach (ZipEntry e in zip1)
+                    {
+                        e.Extract(unpackDirectory, ExtractExistingFileAction.OverwriteSilently);
+                    }
+                }
+
+            }
+            catch (Exception e)
+            {
+                FileInfo zipFileName = new FileInfo(zipToUnpack);
+
+                using (FileStream fileToDecompressAsStream = zipFileName.OpenRead())
+                {
+                    string decompressedFileName = unpackDirectory + "//decompressed.xml";
+                    using (FileStream decompressedStream = File.Create(decompressedFileName))
+                    {
+                        try
+                        {
+                            BZip2.Decompress(fileToDecompressAsStream, decompressedStream, true);
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine(ex.Message);
+                        }
+                    }
                 }
             }
 
+            string[] xml = Directory.GetFiles(unpackDirectory, "*.xml", SearchOption.AllDirectories);
 
-            string dir = @unpackDirectory+"\\prueba.xml";
             string resultado = "";
-            XmlTextReader textReader = new XmlTextReader(dir);
-            textReader.Read();
-            while (textReader.Read())
+            foreach (string name in xml)
             {
-                textReader.MoveToElement();
-                string nombre = textReader.Value;
-
-                if (nombre.Equals(' '))
+                XmlTextReader textReader = new XmlTextReader(name);
+                textReader.Read();
+                while (textReader.Read())
                 {
-                    MessageBox.Show("prueba", "Informacion", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    textReader.MoveToElement();
+                    string nombre = textReader.Value;
+                    resultado = resultado + " " + nombre;
                 }
-                resultado = resultado + " " + nombre;
             }
             return resultado;
         }
