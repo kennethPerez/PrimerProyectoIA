@@ -175,10 +175,81 @@ namespace IA.aprender
             return i;
         }
 
+        public void generarUnosParaCategoria(string cat, int IdIdioma)
+        {
+
+            var query = from a in db.palabras join b in db.Idiomas on a.IDdioma equals b.idiomaID where b.idiomaID == IdIdioma select new { palabra = a.palabra, palabraId=a.palabraID };
+
+            db.muestra.Add(new muestra { categoria = cat, IDdioma = IdIdioma });
+           
+            db.SaveChanges();
+            int muestraIDAInsertar = db.muestra.Max(t => t.muestrasID);
+
+            foreach (var palabra in query)
+            {
+                db.relacion.Add(new relacion { palabraID = palabra.palabraId, muestraID = muestraIDAInsertar, frecuencia = 1 });
+            }
+            db.SaveChanges();
+        }
+
+        public void aprendaUrls()
+        {
+            Lecturas.UrlUploader urlConvert = new Lecturas.UrlUploader();
+
+
+            generarUnosParaCategoria("Tecnologia", 1);
+            /**
+            aprender(urlConvert.ParserUrl("http://www.nacion.com/vivir/ciencia/Crece-interes-tecnologia-interpreta-emociones_0_1552844727.html"), 1, "Tecnologia", false);
+            aprender(urlConvert.ParserUrl("http://www.nacion.com/tecnologia/celulares/nuevos-telefonos-Samsung-llegan-pais_0_1552044793.html"), 1, "Tecnologia", false);
+            aprender(urlConvert.ParserUrl("http://www.nacion.com/tecnologia/informatica/Concurso-Robotifest-UCR-abre-convocatoria_0_1552844712.html"), 1, "Tecnologia", false);
+            aprender(urlConvert.ParserUrl("http://www.nacion.com/tecnologia/avances/Laboratorio-Veritas-trabaja-tiburon_0_1552844725.html"), 1, "Tecnologia", false);
+            aprender(urlConvert.ParserUrl("http://www.nacion.com/vivir/ciencia/NASA-invita-ticos-disenar-aplicaciones_0_1552844716.html"), 1, "Tecnologia", false);
+            aprender(urlConvert.ParserUrl("http://www.nacion.com/tecnologia/avances/Microsoft-obligado-retirar-chatbot_0_1552644744.html"), 1, "Tecnologia", false);
+            aprender(urlConvert.ParserUrl("http://www.nacion.com/tecnologia/avances/America-Latina-zaga-teledeteccion-remota_0_1552444825.html"), 1, "Tecnologia", false);
+            aprender(urlConvert.ParserUrl("http://www.nacion.com/tecnologia/celulares/Apple-alcanza-decadas_0_1552044797.html"), 1, "Tecnologia", false);
+            aprender(urlConvert.ParserUrl("http://www.nacion.com/tecnologia/redes-sociales/youtube-youtube_kids-ninos-eduacion-diversion-espanol_0_1551844899.html"), 1, "Tecnologia", false);
+            aprender(urlConvert.ParserUrl("http://www.nacion.com/tecnologia/gadgets/Prendas-inteligentes-botin-datos-ciberdelincuentes_0_1551644847.html"), 1, "Tecnologia", false);
+           
+            aprender(urlConvert.ParserUrl("nafda"), 1, "Sucesos", false);
+            aprender(urlConvert.ParserUrl("nafda"), 1, "Sucesos", false);
+            aprender(urlConvert.ParserUrl("nafda"), 1, "Sucesos", false);
+            aprender(urlConvert.ParserUrl("nafda"), 1, "Sucesos", false);
+            aprender(urlConvert.ParserUrl("nafda"), 1, "Sucesos", false);
+            aprender(urlConvert.ParserUrl("nafda"), 1, "Sucesos", false);
+            aprender(urlConvert.ParserUrl("nafda"), 1, "Sucesos", false);
+            aprender(urlConvert.ParserUrl("nafda"), 1, "Sucesos", false);
+            aprender(urlConvert.ParserUrl("nafda"), 1, "Sucesos", false);
+            aprender(urlConvert.ParserUrl("nafda"), 1, "Sucesos", false);
+
+            aprender(urlConvert.ParserUrl("nafda"), 1, "Economia", false);
+            aprender(urlConvert.ParserUrl("nafda"), 1, "Economia", false);
+            aprender(urlConvert.ParserUrl("nafda"), 1, "Economia", false);
+            aprender(urlConvert.ParserUrl("nafda"), 1, "Economia", false);
+            aprender(urlConvert.ParserUrl("nafda"), 1, "Economia", false);
+            aprender(urlConvert.ParserUrl("nafda"), 1, "Economia", false);
+            aprender(urlConvert.ParserUrl("nafda"), 1, "Economia", false);
+            aprender(urlConvert.ParserUrl("nafda"), 1, "Economia", false);
+            aprender(urlConvert.ParserUrl("nafda"), 1, "Economia", false);
+            aprender(urlConvert.ParserUrl("nafda"), 1, "Economia", false);
+
+            aprender(urlConvert.ParserUrl("nafda"), 1, "Deportes", false);
+            aprender(urlConvert.ParserUrl("nafda"), 1, "Deportes", false);
+            aprender(urlConvert.ParserUrl("nafda"), 1, "Deportes", false);
+            aprender(urlConvert.ParserUrl("nafda"), 1, "Deportes", false);
+            aprender(urlConvert.ParserUrl("nafda"), 1, "Deportes", false);
+            aprender(urlConvert.ParserUrl("nafda"), 1, "Deportes", false);
+            aprender(urlConvert.ParserUrl("nafda"), 1, "Deportes", false);
+            aprender(urlConvert.ParserUrl("nafda"), 1, "Deportes", false);
+            aprender(urlConvert.ParserUrl("nafda"), 1, "Deportes", false);
+            aprender(urlConvert.ParserUrl("nafda"), 1, "Deportes", false);**/
+
+        }
+
     }
 
 
-    
+
+
 
 
 }

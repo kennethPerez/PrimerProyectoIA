@@ -51,6 +51,9 @@ namespace IA
 
         protected void Page_Load(object sender, EventArgs e)
         {
+
+            //aprendizaje.aprendaUrls();
+
             /*System.Data.Entity.Database.SetInitializer(new IAInicializador());
             IAContext db = new IAContext();
             db.Database.Initialize(true);*/
@@ -253,6 +256,7 @@ namespace IA
         }
         protected void Json_Click(object sender, EventArgs e)
         {
+            ListaDeTweets.Clear();
             IA.aprender.Aprender.vienenTweets = true;
             if (text_area.Text != "" && text_area.Text != "Debe de ingresar algun texto para ser clasificado." &&
                 text_area.Text != "Debe ingresar una url." && text_area.Text != "Debe de ingresar algun texto para ser identificado." &&
