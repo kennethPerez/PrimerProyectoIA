@@ -52,7 +52,7 @@ namespace IA
         protected void Page_Load(object sender, EventArgs e)
         {
 
-            //aprendizaje.aprendaUrls();
+            aprendizaje.aprendaUrls();
 
             /*System.Data.Entity.Database.SetInitializer(new IAInicializador());
             IAContext db = new IAContext();

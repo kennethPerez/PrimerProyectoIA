@@ -159,9 +159,7 @@ namespace IA.bayes_algoritmo
                 suma += dato;
             }
             prom = suma / N;
-
-            if(prom == 0)
-                return 0.1;
+            
             return prom;
         }
 
