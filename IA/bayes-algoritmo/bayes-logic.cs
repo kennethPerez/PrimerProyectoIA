@@ -12,6 +12,18 @@ namespace IA.bayes_algoritmo
         List<bayesCategoria> stockData;
         string texto;
 
+        private int cantidadApariciones(string palabra, string[] lista)
+        {
+            int i = 0;
+            foreach (string palabraEnLista in lista)
+            {
+                if (palabraEnLista.Equals(palabra))
+                {
+                    i++;
+                }
+            }
+            return i;
+        }
         public NaiveBayes(List<bayesCategoria> data, List<bayesCategoria> categorias, string texto)
         {
             this.stockData = data;
@@ -112,13 +124,15 @@ namespace IA.bayes_algoritmo
 
 
             List<incidencia> incidencias = new List<incidencia>();
+            char[] delimiterChars = { ' ', ',', '.', ':', '\t' };
+            string[] words = texto.Split(delimiterChars, StringSplitOptions.RemoveEmptyEntries);
 
-            string[] words = texto.Split(' ');
-            string[] distinctWords = words.Distinct().ToArray();
-            foreach (string word in distinctWords)
+            foreach (bayesPalabra palabra in tableResult.ElementAt(0).palabra)
             {
-                incidencias.Add(new incidencia(word, System.Text.RegularExpressions.Regex.Matches(texto, word).Count));
+                //palabrasMuestra.Add(new bayesPalabra(palabra.palabra, System.Text.RegularExpressions.Regex.Matches(texto, palabra.palabra).Count));
+                palabrasMuestra.Add(new bayesPalabra(palabra.palabra, cantidadApariciones(palabra.palabra, words)));
             }
+            
 
             List<incidencia> SortedList = incidencias.OrderBy(o => o.repeticiones).ToList();
             SortedList.Reverse();
@@ -145,23 +159,36 @@ namespace IA.bayes_algoritmo
                 suma += dato;
             }
             prom = suma / N;
+
+            if(prom == 0)
+                return 0.1;
             return prom;
         }
 
         // Calcula la varianza de una lista de numeros
         public double calculateVarianza(List<double> numeros)
         {
-            double N = 0, prom = 0, NrestadoUno = 0, sumapotencias = 0, desvStd = 0;
-            N = numeros.Count;
-            NrestadoUno = N - 1;
-            prom = calculateMedia(numeros);
+            try {
+                double N = 0, prom = 0, NrestadoUno = 0, sumapotencias = 0, desvStd = 0;
+                N = numeros.Count;
+                NrestadoUno = N - 1;
+                prom = calculateMedia(numeros);
 
-            foreach (double dato in numeros)
-            {
-                sumapotencias += Math.Pow((dato - prom), 2);
+                foreach (double dato in numeros)
+                {
+                    sumapotencias += Math.Pow((dato - prom), 2);
+                }
+                desvStd = Math.Sqrt((1 * sumapotencias) / NrestadoUno);
+                double x = Math.Pow(desvStd, 2);
+                if (x == 0)
+                    return 0.1;
+                else
+                    return x;
             }
-            desvStd = Math.Sqrt((1 * sumapotencias) / NrestadoUno);
-            return Math.Pow(desvStd, 2);
+            catch
+            {
+                return 0.1;
+            }
         }
 
     }

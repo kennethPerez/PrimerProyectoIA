@@ -13,9 +13,23 @@ using System.Net;
 using IA.bayes_algoritmo;
 using IA.detectarIdioma;
 using System.Data;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace IA
 {
+    public class ResultTweets
+    {
+        public string name;
+        public int idIdioma;
+        public string texto;
+        public ResultTweets(string name, int idioma, string texto)
+        {
+            this.idIdioma = idioma;
+            this.name = name;
+            this.texto = texto;
+        }
+    }
     public partial class index : System.Web.UI.Page
     {
         private IAContext db = new IAContext();
@@ -33,29 +47,77 @@ namespace IA
         DrawChart DrawChartBase = new DrawChart();
 
 
+        List<ResultTweets> ListaDeTweets = new List<ResultTweets>();
+
         protected void Page_Load(object sender, EventArgs e)
         {
-            System.Data.Entity.Database.SetInitializer(new IAInicializador());
+            /*System.Data.Entity.Database.SetInitializer(new IAInicializador());
             IAContext db = new IAContext();
-            db.Database.Initialize(true);
+            db.Database.Initialize(true);*/
         }
 
         public void idioma_click(object sender, EventArgs e) {
-            if (text_area.Text != "" && text_area.Text != "Debe de ingresar algun texto para ser clasificado." &&
-                text_area.Text != "Debe ingresar una url." && text_area.Text != "Debe de ingresar algun texto para ser identificado." &&
-                text_area.Text != "Error no ha seleccionado un archivo o este esta vacio." && text_area.Text != "Error al cargar los archivos." && text_area.Text != "Formato de archivo no valido.")
+
+
+            if (IA.aprender.Aprender.vienenTweets)
             {
-                string Idioma = languageDetector.classifier(text_area.Text);
-                language.Text = "El idioma detectado es: " + Idioma;
 
-                DataTable result = LanguageDetector.DictionaryToDatatable(languageDetector.DictText);
-                DataTable origin = LanguageDetector.DictionaryToDatatable(languageDetector.GetDictionary(Idioma));
+                IA.aprender.Aprender.vienenTweets = false;
+                string[] stringSeparado= text_area.Text.Split('\n');
 
-                ltResult.Text = DrawChartResult.BindChart(result, "chartResult", "Frecuencia de letras en el texto", "Letras");
-                ltBase.Text = DrawChartBase.BindChart(origin, "chartBase", "Frecuencia del idiama " + Idioma, "Letras");
+                foreach (string palabra in stringSeparado)
+                {
+                    try
+                    {
+                        JObject jresult = JObject.Parse(palabra);
+                        int IdIdioma = 99;
+                        string Idioma = languageDetector.classifier(jresult["text"].ToString());
+                        if (Idioma.Equals("Ingles"))
+                        {
+                            IdIdioma = 2;
+                        }
+                        if (Idioma.Equals("Aleman"))
+                        {
+                            IdIdioma = 3;
+                        }
+                        if (Idioma.Equals("Español"))
+                        {
+                            IdIdioma = 1;
+                        }
+                        if (Idioma.Equals("Turco"))
+                        {
+                            IdIdioma = 4;
+                        }
+                        ResultTweets x = new ResultTweets(jresult["user"]["screen_name"].ToString(), IdIdioma, jresult["text"].ToString());
+                        ListaDeTweets.Add(x);
+                    }
+                    catch (Exception xd)
+                    {
+                        continue;
+                    }
+                    /*ANALIZAR CADA TWEETS CADA EN JSON*/
+                 }
             }
-            else
-                text_area.Text = "Debe ingresar un texto para poder detectar el idioma.";
+
+
+
+            else {
+                if (text_area.Text != "" && text_area.Text != "Debe de ingresar algun texto para ser clasificado." &&
+                    text_area.Text != "Debe ingresar una url." && text_area.Text != "Debe de ingresar algun texto para ser identificado." &&
+                    text_area.Text != "Error no ha seleccionado un archivo o este esta vacio." && text_area.Text != "Error al cargar los archivos." && text_area.Text != "Formato de archivo no valido.")
+                {
+                    string Idioma = languageDetector.classifier(text_area.Text);
+                    language.Text = "El idioma detectado es: " + Idioma;
+
+                    DataTable result = LanguageDetector.DictionaryToDatatable(languageDetector.DictText);
+                    DataTable origin = LanguageDetector.DictionaryToDatatable(languageDetector.GetDictionary(Idioma));
+
+                    ltResult.Text = DrawChartResult.BindChart(result, "chartResult", "Frecuencia de letras en el texto", "Letras");
+                    ltBase.Text = DrawChartBase.BindChart(origin, "chartBase", "Frecuencia del idiama " + Idioma, "Letras");
+                }
+                else
+                    text_area.Text = "Debe ingresar un texto para poder detectar el idioma.";
+            }
         }
 
         protected void CargarArchivo_Click(object sender, EventArgs e)
@@ -68,11 +130,21 @@ namespace IA
         protected void aprender(object sender, EventArgs e)
         {
 
-            text_area.Text += aprendizaje.aprender(text_area.Text, 1, "Tecnologia");
+            text_area.Text += aprendizaje.aprender(text_area.Text, 1, "Tecnologia",true);
+
+        }
+        protected void aprenderMuestra(object sender, EventArgs e)
+        {
+
+            JObject jresult = JObject.Parse(text_area.Text);
+
+
+            text_area.Text += aprendizaje.aprender(jresult["Texto"].ToString(),Convert.ToInt32( jresult["Idioma"].ToString()), jresult["Cat"].ToString(), false);
+
+            //text_area.Text += aprendizaje.aprender(text_area.Text, 1, "Tecnologia", false);
 
         }
 
-       
 
         protected void HtmlFile_Click(object sender, EventArgs e)
         {
@@ -142,7 +214,7 @@ namespace IA
             }
                        
 
-            string texto = "La tecnologia tecnologia tecnologia tecnologia utilizando un celular en la religion";
+            string texto = text_area.Text;
 
             Console.WriteLine("Texto: " + texto.ToLower() + "\n");
 
@@ -181,7 +253,7 @@ namespace IA
         }
         protected void Json_Click(object sender, EventArgs e)
         {
-
+            IA.aprender.Aprender.vienenTweets = true;
             if (text_area.Text != "" && text_area.Text != "Debe de ingresar algun texto para ser clasificado." &&
                 text_area.Text != "Debe ingresar una url." && text_area.Text != "Debe de ingresar algun texto para ser identificado." &&
                 text_area.Text != "Error no ha seleccionado un archivo o este esta vacio." && text_area.Text != "Error al cargar los archivos." && text_area.Text != "Formato de archivo no valido.")

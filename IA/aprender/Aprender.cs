@@ -10,41 +10,42 @@ namespace IA.aprender
 {
     public class Aprender
     {
-
+        public static bool vienenTweets = false;
         IA.stopWords.stopWords stopWords = new IA.stopWords.stopWords();
         private IAContext db = new IAContext();
-        public string aprenderMuestra(bayesCategoria muestra,int IdIdioma)
+        public string aprenderMuestra(bayesCategoria muestra, int IdIdioma)
         {
             try
             {
                 db.muestra.Add(new muestra { categoria = muestra.categoria, IDdioma = IdIdioma });
                 db.SaveChanges();
                 int muestraIDAInsertar = db.muestra.Max(t => t.muestrasID);
-                var allPalabras = db.palabras.ToArray();
-                foreach (bayesPalabra palabra in muestra.palabra)
-                {
-                    foreach (Palabras x in allPalabras)
+                var allPalabras = from a in db.palabras join b in db.Idiomas on a.IDdioma equals b.idiomaID where b.idiomaID == IdIdioma select new { palabra = a.palabra, palabraId=a.palabraID };
+
+                //var allPalabras = db.palabras.ToArray();
+                int i = 0;
+                foreach (var palabra in allPalabras) { 
+                    if (palabra.palabra.Equals(muestra.palabra.ElementAt(i).palabra))
                     {
-                        if (x.palabra.Equals(palabra.palabra))
-                        {
-                            db.relacion.Add(new relacion { palabraID = x.palabraID, muestraID = muestraIDAInsertar, frecuencia = Convert.ToInt32(palabra.frecuencia) });
-                        }
+                        db.relacion.Add(new relacion { palabraID = palabra.palabraId, muestraID = muestraIDAInsertar, frecuencia = Convert.ToInt32(muestra.palabra.ElementAt(i).frecuencia) });
                     }
+                    i++;
                 }
                 db.SaveChanges();
                 return "Exito en la insercion de una muestra";
             }
             catch (Exception e)
             {
-                return "Error en la insercion de una muestra"+" --> "+e.Message;
+                return "Error en la insercion de una muestra" + " --> " + e.Message;
             }
 
 
-            
+
         }
-        public string aprenderPalabras(List<incidencia> palabras,int idiomaID)
+        public string aprenderPalabras(List<incidencia> palabras, int idiomaID)
         {
-            try {
+            try
+            {
                 foreach (incidencia palabra in palabras)
                 {
                     db.palabras.Add(new IA.models.Palabras { IDdioma = idiomaID, palabra = palabra.palabra });
@@ -67,72 +68,75 @@ namespace IA.aprender
 
 
         }
-        public string aprender(string Text,int IdIdiomaN,string cat)
+        public string aprender(string Text, int IdIdiomaN, string cat, Boolean palabras)
         {
 
             /*Faltan validaciones*/
+
+            string Res = "";
             string texto = Text.ToLower();
             int IdIdioma = IdIdiomaN;
             string categoria = cat;
-
-            /*Filtrado de palabras*/
-            List<incidencia> incidencias = new List<incidencia>();
             char[] delimiterChars = { ' ', ',', '.', ':', '\t' };
             string[] words = texto.Split(delimiterChars, StringSplitOptions.RemoveEmptyEntries);
-            string[] distinctWords = words.Distinct().ToArray();
-            foreach (string word in distinctWords)
+            if (palabras)
             {
-                incidencias.Add(new incidencia(word, cantidadApariciones(word, words)));
+                /*Filtrado de palabras*/
+                List<incidencia> incidencias = new List<incidencia>();
+                
+                string[] distinctWords = words.Distinct().ToArray();
+                foreach (string word in distinctWords)
+                {
+                    incidencias.Add(new incidencia(word, cantidadApariciones(word, words)));
+                }
+
+                List<incidencia> SortedList = incidencias.OrderBy(o => o.repeticiones).ToList();
+                SortedList.Reverse();
+                /*Filtrarlas por las stop words*/
+                List<string> StopWord = new List<string>();
+
+                if (IdIdioma == 1)
+                {
+                    StopWord = stopWords.stopWordSpanish;
+                }
+                if (IdIdioma == 2)
+                {
+                    StopWord = stopWords.stopWordEnglish;
+                }
+                if (IdIdioma == 3)
+                {
+                    StopWord = stopWords.stopWordGerman;
+                }
+                if (IdIdioma == 4)
+                {
+                    StopWord = stopWords.stopWordTurkish;
+                }
+
+                //no esta funckando
+                List<incidencia> PalabrasSinStopWords = new List<incidencia>();
+                foreach (string comp in StopWord)
+                {
+                    SortedList.RemoveAll(u => u.palabra.Equals(comp));
+                }
+
+                /*filtrar que no meta palabras repetidas*/
+
+                foreach (IA.models.Palabras comp in db.palabras)
+                {
+                    SortedList.RemoveAll(u => u.palabra.Equals(comp.palabra));
+                }
+
+                /*seleccionar cuantas aprender*/
+                List<incidencia> PalabrasAAgregar = new List<incidencia>();
+                int cantidadDeApredisagePalabras = 4;
+                for (int i = 0; i < cantidadDeApredisagePalabras; i++)
+                {
+                    PalabrasAAgregar.Add(SortedList.ElementAt(i));
+                }
+
+
+                Res = "\n" + aprenderPalabras(PalabrasAAgregar, IdIdioma);
             }
-
-            List<incidencia> SortedList = incidencias.OrderBy(o => o.repeticiones).ToList();
-            SortedList.Reverse();
-            /*Filtrarlas por las stop words*/
-            List<string> StopWord = new List<string>();
-
-            if (IdIdioma == 1)
-            {
-                StopWord = stopWords.stopWordSpanish;
-            }
-            if (IdIdioma == 2)
-            {
-                StopWord = stopWords.stopWordEnglish;
-            }
-            if (IdIdioma == 3)
-            {
-                StopWord = stopWords.stopWordGerman;
-            }
-            if (IdIdioma == 4)
-            {
-                StopWord = stopWords.stopWordTurkish;
-            }
-
-            //no esta funckando
-            List<incidencia> PalabrasSinStopWords = new List<incidencia>();
-            foreach (string comp in StopWord)
-            {
-                SortedList.RemoveAll(u => u.palabra.Equals(comp));
-            }
-
-            /*filtrar que no meta palabras repetidas*/
-
-            foreach (IA.models.Palabras comp in db.palabras)
-            {
-                SortedList.RemoveAll(u => u.palabra.Equals(comp.palabra));
-            }
-
-            /*seleccionar cuantas aprender*/
-            List<incidencia> PalabrasAAgregar = new List<incidencia>();
-            int cantidadDeApredisagePalabras = 4;
-            for (int i = 0; i < cantidadDeApredisagePalabras; i++)
-            {
-                PalabrasAAgregar.Add(SortedList.ElementAt(i));
-            }
-
-
-            string Res = "";
-            Res =   "\n" + aprenderPalabras(PalabrasAAgregar, IdIdioma);
-
             /*Generacion de la muestra*/
             List<bayesPalabra> tableResult = new List<bayesPalabra>();
 
@@ -150,7 +154,7 @@ namespace IA.aprender
 
             foreach (bayesPalabra palabra in tableResult)
             {
-                palabrasMuestra.Add(new bayesPalabra(palabra.palabra, System.Text.RegularExpressions.Regex.Matches(texto, palabra.palabra).Count));
+                palabrasMuestra.Add(new bayesPalabra(palabra.palabra, cantidadApariciones( palabra.palabra, words)));
             }
 
             bayesCategoria tablaMuestra = new bayesCategoria(categoria, palabrasMuestra);
@@ -172,4 +176,9 @@ namespace IA.aprender
         }
 
     }
+
+
+    
+
+
 }
