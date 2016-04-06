@@ -315,27 +315,61 @@ namespace IA
             return data;
         }
 
+        class grafico {
+            public string cat;
+            public int can;
+
+            public grafico(string cat, int can) {
+                this.can = can;
+                this.cat = cat;
+            }
+        }
+
         protected void categorizar(object sender, EventArgs e)
         {
             // Crear las categorias
             List<bayesCategoria> categorias = new List<bayesCategoria>();
+            List<grafico> graficos = new List<grafico>();
             var result = db.muestra.Select(m => m.categoria).Distinct();
 
             foreach (string categoria in result)
             {
+                graficos.Add(new grafico(categoria, 0));
                 categorias.Add(new bayesCategoria(categoria, new List<bayesPalabra>()));
             }
 
 
+            
 
             if (IA.aprender.Aprender.vienenJson)
             {
                 IA.aprender.Aprender.vienenJson = false;
                 foreach (ResultTweets t in IA.aprender.Aprender.ListaDeTweets)
                 {
-                    Respuesta Finalresult = new NaiveBayes(crearData(t.idIdioma), categorias, t.texto.ToLower()).classifier();
-                                        
+                    //Respuesta Finalresult = new NaiveBayes(crearData(t.idIdioma), categorias, t.texto.ToLower()).classifier();
+                    Respuesta Finalresult = new NaiveBayes(crearData(1), categorias, t.texto.ToLower()).classifier();
+
+                    foreach (grafico g in graficos) {
+                        if (g.cat == Finalresult.categoria) {
+                            g.can += 1;
+                            break;
+                        }
+                    }
+                
                 }
+
+                DrawChartCategories drc = new DrawChartCategories();
+                DataTable table = new DataTable();
+                table.Columns.Add("categoria", typeof(string));
+                table.Columns.Add("porcentaje", typeof(double));
+
+                foreach (grafico g in graficos)
+                {
+                    table.Rows.Add(g.cat, g.can);
+                }
+
+                LiteralCateTexto.Text = drc.BindChart(table, "chartCateTexto", "Porcentaje de Categorias", "Categorias");
+
             }
             else
             {

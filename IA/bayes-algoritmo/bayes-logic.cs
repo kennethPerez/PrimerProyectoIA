@@ -69,12 +69,13 @@ namespace IA.bayes_algoritmo
         public Respuesta probabilidades(List<bayesCategoria> tableResult)
         {
             List<bayesPalabra> palabrasMuestra = new List<bayesPalabra>();
+            char[] delimiterChars = { ' ', ',', '.', ':', '\t' };
+            string[] words = texto.Split(delimiterChars, StringSplitOptions.RemoveEmptyEntries);
 
             foreach (bayesPalabra palabra in tableResult.ElementAt(0).palabra)
             {
-                palabrasMuestra.Add(new bayesPalabra(palabra.palabra, System.Text.RegularExpressions.Regex.Matches(texto, palabra.palabra).Count));
+                palabrasMuestra.Add(new bayesPalabra(palabra.palabra, cantidadApariciones(palabra.palabra, words)));
             }
-
             /*
             palabrasMuestra.Add(new bayesPalabra("altura", 6));
             palabrasMuestra.Add(new bayesPalabra("peso", 130));
@@ -124,15 +125,13 @@ namespace IA.bayes_algoritmo
 
 
             List<incidencia> incidencias = new List<incidencia>();
-            char[] delimiterChars = { ' ', ',', '.', ':', '\t' };
-            string[] words = texto.Split(delimiterChars, StringSplitOptions.RemoveEmptyEntries);
 
             foreach (bayesPalabra palabra in tableResult.ElementAt(0).palabra)
             {
                 //palabrasMuestra.Add(new bayesPalabra(palabra.palabra, System.Text.RegularExpressions.Regex.Matches(texto, palabra.palabra).Count));
                 palabrasMuestra.Add(new bayesPalabra(palabra.palabra, cantidadApariciones(palabra.palabra, words)));
             }
-            
+
 
             List<incidencia> SortedList = incidencias.OrderBy(o => o.repeticiones).ToList();
             SortedList.Reverse();
@@ -159,14 +158,15 @@ namespace IA.bayes_algoritmo
                 suma += dato;
             }
             prom = suma / N;
-            
+
             return prom;
         }
 
         // Calcula la varianza de una lista de numeros
         public double calculateVarianza(List<double> numeros)
         {
-            try {
+            try
+            {
                 double N = 0, prom = 0, NrestadoUno = 0, sumapotencias = 0, desvStd = 0;
                 N = numeros.Count;
                 NrestadoUno = N - 1;
@@ -202,7 +202,7 @@ namespace IA.bayes_algoritmo
             this.categoria = categoria;
             this.palabra = palabra;
         }
-        public bayesCategoria(string categoria, List<bayesPalabra> palabra,int muestraId)
+        public bayesCategoria(string categoria, List<bayesPalabra> palabra, int muestraId)
         {
             this.categoria = categoria;
             this.palabra = palabra;
