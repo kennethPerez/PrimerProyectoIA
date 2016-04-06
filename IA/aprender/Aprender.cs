@@ -11,6 +11,7 @@ namespace IA.aprender
     public class Aprender
     {
         public static bool vienenTweets = false;
+        public static bool vienenJson = false;
         public static bool vienenPosts = false;
         IA.stopWords.stopWords stopWords = new IA.stopWords.stopWords();
         private IAContext db = new IAContext();
@@ -50,6 +51,7 @@ namespace IA.aprender
                 List<string> Categorias = new List<string>();
                 foreach (incidencia palabra in palabras)
                 {
+                    Categorias.Clear();
                     db.palabras.Add(new IA.models.Palabras { IDdioma = idiomaID, palabra = palabra.palabra });
                     db.SaveChanges();
                     int PalabraIDAInsertar = db.palabras.Max(t => t.palabraID);

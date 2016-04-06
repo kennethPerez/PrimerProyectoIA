@@ -201,7 +201,7 @@ namespace IA.stopWords
                 "o",
                 "y",
                 "más",
-                "no","se","al"
+                "no","se","al","ya"
 
             };
             stringEspannol.ForEach(s => stopWordSpanish.Add(s));

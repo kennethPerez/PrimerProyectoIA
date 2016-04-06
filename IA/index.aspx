@@ -122,10 +122,10 @@
                     <asp:Button ID="buttonCarpeta" runat="server" OnClick="carpeta_click" Text="Cargar Carpeta" />
                     <asp:Button ID="buttonTwitter" runat="server" OnClick="twitter_click" Text="Cargar tweets" />
                     <asp:Button ID="buttonLanguage" runat="server" OnClick="idioma_click" Text="Detectar Idioma" />
-                    <asp:Button ID="buttonNaiveBayes" runat="server" OnClick="categorizar" Text="prueba categorizacion" /> 
+                    <asp:Button ID="buttonNaiveBayes" runat="server" OnClick="categorizar" Text="Categorizar" /> 
                     <asp:CheckBox ID="CheckBox1" runat="server" Text="Facebook" oncheckedchanged="facebook" />
-                    <asp:Button ID="button1" runat="server" OnClick="aprender" Text="Agregar Muestra y aprender palabras" />
-                    <asp:Button ID="button2" runat="server" OnClick="aprenderMuestra" Text="Agregar Muestra" />                 
+                    <!--<asp:Button ID="button1" runat="server" OnClick="aprender" Text="Agregar Muestra y aprender palabras" />
+                    <asp:Button ID="button2" runat="server" OnClick="aprenderMuestra" Text="Agregar Muestra" />      -->           
                 </div>
             </center>
             <hr>

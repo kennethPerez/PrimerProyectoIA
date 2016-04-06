@@ -71,6 +71,7 @@ namespace IA
                 if (IA.aprender.Aprender.vienenPosts) {
                     IA.aprender.Aprender.vienenPosts = false;
                     IA.aprender.Aprender.vienenTweets = false;
+                    IA.aprender.Aprender.vienenJson = true;
                     string[] stringSeparado = text_area.Text.Split('^');
 
                     foreach (string palabra in stringSeparado)
@@ -291,62 +292,87 @@ namespace IA
         protected void categorizar(object sender, EventArgs e)
         {
 
-
-            int resultIdioma = 1;
-            List<bayesCategoria> data = new List<bayesCategoria>();
-
-            var query = from a in db.muestra join b in db.relacion on a.muestrasID equals b.muestraID join c in db.palabras on b.palabraID equals c.palabraID where  c.IDdioma == resultIdioma select new { muestra = a.muestrasID ,categoria = a.categoria, palabra = c.palabra , frecuencia = b.frecuencia  } ;
-
-           
-            foreach (var jsonResult in query)
+            if (IA.aprender.Aprender.vienenJson)
             {
-                res respuesta = estaEnLista(data, jsonResult.muestra);
-                if (respuesta.boolean)  //si ya existe en la lista
+                IA.aprender.Aprender.vienenJson = false;
+                foreach (ResultTweets t in ListaDeTweets)
                 {
-                    data.ElementAt(respuesta.index).palabra.Add(new bayesPalabra(jsonResult.palabra, jsonResult.frecuencia));
-                }
-                else     //sino existe
-                {
-                    List<bayesPalabra> lista =new List<bayesPalabra>();
-                    lista.Add(new bayesPalabra(jsonResult.palabra, jsonResult.frecuencia));
-                    data.Add(new bayesCategoria(jsonResult.categoria, lista, jsonResult.muestra));
 
                 }
+            }
+            else {
+                int resultIdioma = 0;
+                switch (language.Text)
+                {
+                    case "El idioma detectado es: Español":
+                        resultIdioma = 1;
+                        break;
+                    case "El idioma detectado es: Ingles":
+                        resultIdioma = 2;
+                        break;
+                    case "El idioma detectado es: Turco":
+                        resultIdioma = 4;
+                        break;
+                    case "El idioma detectado es: Aleman":
+                        resultIdioma = 3;
+                        break;
+                }
+
+                List<bayesCategoria> data = new List<bayesCategoria>();
+
+                var query = from a in db.muestra join b in db.relacion on a.muestrasID equals b.muestraID join c in db.palabras on b.palabraID equals c.palabraID where c.IDdioma == resultIdioma select new { muestra = a.muestrasID, categoria = a.categoria, palabra = c.palabra, frecuencia = b.frecuencia };
+
+
+                foreach (var jsonResult in query)
+                {
+                    res respuesta = estaEnLista(data, jsonResult.muestra);
+                    if (respuesta.boolean)  //si ya existe en la lista
+                    {
+                        data.ElementAt(respuesta.index).palabra.Add(new bayesPalabra(jsonResult.palabra, jsonResult.frecuencia));
+                    }
+                    else     //sino existe
+                    {
+                        List<bayesPalabra> lista = new List<bayesPalabra>();
+                        lista.Add(new bayesPalabra(jsonResult.palabra, jsonResult.frecuencia));
+                        data.Add(new bayesCategoria(jsonResult.categoria, lista, jsonResult.muestra));
+
+                    }
+
+                }
+
+                List<bayesCategoria> categorias = new List<bayesCategoria>();
+                var result = db.muestra.Select(m => m.categoria).Distinct();
+
+                foreach (string categoria in result)
+                {
+                    categorias.Add(new bayesCategoria(categoria, new List<bayesPalabra>()));
+                }
+
+
+                string texto = text_area.Text;
+
+                Console.WriteLine("Texto: " + texto.ToLower() + "\n");
+
+                Respuesta Finalresult = new NaiveBayes(data, categorias, texto.ToLower()).classifier();
+                string concat = "";
+                List<resN> probFinales = new List<resN>();
+                foreach (ResultNaiveBayes r in Finalresult.listaDeProbabilidadesFinales)
+                {
+                    double prob = r.probabilidad * 100;
+                    probFinales.Add(new resN(prob, r.categoria));
+                    concat += r.categoria + " = " + prob + "%\n";
+                }
+
+                List<resN> SortedList = probFinales.OrderBy(o => o.prob).ToList();
+                SortedList.Reverse();
+
+                if (SortedList.ElementAt(0).prob > 80)
+                {
+                    text_area.Text += aprendizaje.aprender(text_area.Text, 1, SortedList.ElementAt(0).cat, true, true);
+                }
+                text_area.Text = concat;
 
             }
-            
-            List<bayesCategoria> categorias = new List<bayesCategoria>();
-            var result = db.muestra.Select(m => m.categoria).Distinct();
-
-            foreach (string categoria in result)
-            {
-                categorias.Add(new bayesCategoria(categoria, new List<bayesPalabra>()));
-            }
-                       
-
-            string texto = text_area.Text;
-
-            Console.WriteLine("Texto: " + texto.ToLower() + "\n");
-
-            Respuesta Finalresult = new NaiveBayes(data, categorias, texto.ToLower()).classifier();
-            string concat="";
-            List<resN> probFinales = new  List<resN>();
-            foreach (ResultNaiveBayes r in Finalresult.listaDeProbabilidadesFinales)
-            {
-                double prob = r.probabilidad * 100;
-                probFinales.Add(new resN(prob,r.categoria));
-                concat +=r.categoria + " = " + prob + "%\n";
-            }
-
-            List<resN> SortedList = probFinales.OrderBy(o => o.prob).ToList();
-            SortedList.Reverse();
-
-            if(SortedList.ElementAt(0).prob > 80){
-                text_area.Text += aprendizaje.aprender(text_area.Text, 1, SortedList.ElementAt(0).cat, true, true);
-            }
-            text_area.Text = concat;
-
-            
 
         }
 
