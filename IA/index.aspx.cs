@@ -52,7 +52,7 @@ namespace IA
         protected void Page_Load(object sender, EventArgs e)
         {
 
-            aprendizaje.aprendaUrls();
+            //aprendizaje.aprendaUrls();
 
             /*System.Data.Entity.Database.SetInitializer(new IAInicializador());
             IAContext db = new IAContext();
@@ -133,7 +133,7 @@ namespace IA
         protected void aprender(object sender, EventArgs e)
         {
 
-            text_area.Text += aprendizaje.aprender(text_area.Text, 1, "Tecnologia",true);
+            text_area.Text += aprendizaje.aprender(text_area.Text, 1, "Tecnologia",true,true);
 
         }
         protected void aprenderMuestra(object sender, EventArgs e)
@@ -142,7 +142,7 @@ namespace IA
             JObject jresult = JObject.Parse(text_area.Text);
 
 
-            text_area.Text += aprendizaje.aprender(jresult["Texto"].ToString(),Convert.ToInt32( jresult["Idioma"].ToString()), jresult["Cat"].ToString(), false);
+            text_area.Text += aprendizaje.aprender(jresult["Texto"].ToString(),Convert.ToInt32( jresult["Idioma"].ToString()), jresult["Cat"].ToString(), false,true);
 
             //text_area.Text += aprendizaje.aprender(text_area.Text, 1, "Tecnologia", false);
 
@@ -186,9 +186,11 @@ namespace IA
         protected void categorizar(object sender, EventArgs e)
         {
 
+
+            int resultIdioma = 1;
             List<bayesCategoria> data = new List<bayesCategoria>();
-            
-            var query = from a in db.muestra join b in db.relacion on a.muestrasID equals b.muestraID join c in db.palabras on b.palabraID equals c.palabraID where c.IDdioma == a.IDdioma select new { muestra = a.muestrasID ,categoria = a.categoria, palabra = c.palabra , frecuencia = b.frecuencia  } ;
+
+            var query = from a in db.muestra join b in db.relacion on a.muestrasID equals b.muestraID join c in db.palabras on b.palabraID equals c.palabraID where  c.IDdioma == resultIdioma select new { muestra = a.muestrasID ,categoria = a.categoria, palabra = c.palabra , frecuencia = b.frecuencia  } ;
 
            
             foreach (var jsonResult in query)
@@ -223,14 +225,35 @@ namespace IA
 
             Respuesta Finalresult = new NaiveBayes(data, categorias, texto.ToLower()).classifier();
             string concat="";
+            List<resN> probFinales = new  List<resN>();
             foreach (ResultNaiveBayes r in Finalresult.listaDeProbabilidadesFinales)
             {
-                concat+=r.categoria + " = " + r.probabilidad * 100 + "%\n";
+                double prob = r.probabilidad * 100;
+                probFinales.Add(new resN(prob,r.categoria));
+                concat +=r.categoria + " = " + prob + "%\n";
+            }
+
+            List<resN> SortedList = probFinales.OrderBy(o => o.prob).ToList();
+            SortedList.Reverse();
+
+            if(SortedList.ElementAt(0).prob > 80){
+                text_area.Text += aprendizaje.aprender(text_area.Text, 1, SortedList.ElementAt(0).cat, true, true);
             }
             text_area.Text = concat;
 
-        }
+            
 
+        }
+        private class resN
+        {
+            public double prob;
+            public string cat;
+            public resN(double prob, string cat)
+            {
+                this.cat = cat;
+                this.prob = prob;
+            }
+        }
         private class res
         {
             public bool boolean;
