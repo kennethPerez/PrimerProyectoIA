@@ -44,24 +44,13 @@
 
               FB.api("/me/feed?limit=9999999", function (response) {
                   var respuesta = "";
-                  console.log(response);
                   for (i = 0; i < response.data.length; i++) {
-                      var temp = "";
                       if (response.data[i].message != undefined) {
-                          temp += response.data[i].message;
+                          respuesta += "{'post':'"+response.data[i].message+"'}^";
                       }
-                      if (response.data[i].story != undefined) {
-                          if (temp != "") {
-                              temp += " - " + response.data[i].story;
-                          }
-                          else {
-                              temp += response.data[i].story;
-                          }
-                      }
-                      respuesta += temp + "\n\n";
-
                   }
                   document.getElementById("text_area").innerHTML += respuesta;
+                  document.getElementById("post").innerHTML = "True";
               });
           }
 
@@ -82,7 +71,7 @@
           }
 
           function Logout() {
-              FB.logout(function () { document.location.reload(); });
+              FB.logout(function () { document.location.reload(); document.getElementById("post").innerHTML = "False"; });
           }
 
 
@@ -117,7 +106,8 @@
             <br>
             <button onclick="loginFB()">Cargar post</button>
             <div id="imagen"> </div>
-            <div id="informacion"> 
+            <div id="informacion"> </div>
+            <div style="display:none;" id="post">False</div>
         </center>
 
         <form id="form1" runat="server">
@@ -133,6 +123,7 @@
                     <asp:Button ID="buttonTwitter" runat="server" OnClick="twitter_click" Text="Cargar tweets" />
                     <asp:Button ID="buttonLanguage" runat="server" OnClick="idioma_click" Text="Detectar Idioma" />
                     <asp:Button ID="buttonNaiveBayes" runat="server" OnClick="categorizar" Text="prueba categorizacion" /> 
+                    <asp:CheckBox ID="CheckBox1" runat="server" Text="Facebook" oncheckedchanged="facebook" />
                     <asp:Button ID="button1" runat="server" OnClick="aprender" Text="Agregar Muestra y aprender palabras" />
                     <asp:Button ID="button2" runat="server" OnClick="aprenderMuestra" Text="Agregar Muestra" />                 
                 </div>
@@ -150,8 +141,22 @@
             <div class="col-md-12">
                 <div id="chartResult" class="col-md-6">  <asp:Literal ID="ltResult" runat="server"></asp:Literal></div>                    
                 <div id="chartBase" class="col-md-6">  <asp:Literal ID="ltBase" runat="server"></asp:Literal></div>
-            </div>    
+            </div>
+            <br>    
             <hr>
+            <br>
+            <div class="col-md-12">
+                <div class="col-md-6"> 
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <asp:Label Font-Size="Large" ForeColor="#5c7fa0" ID="usuariosAnalizados" runat="server"></asp:Label>
+                    <br>
+                    <asp:Label Font-Size="Large" ForeColor="#5c7fa0" ID="teewsAnalizados" runat="server"></asp:Label>
+                </div>                    
+                <div id="chartJson" class="col-md-6">  <asp:Literal ID="LiteralMessage" runat="server"></asp:Literal></div>
+            </div> 
         </form>   
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>

@@ -11,6 +11,7 @@ namespace IA.aprender
     public class Aprender
     {
         public static bool vienenTweets = false;
+        public static bool vienenPosts = false;
         IA.stopWords.stopWords stopWords = new IA.stopWords.stopWords();
         private IAContext db = new IAContext();
         public string aprenderMuestra(bayesCategoria muestra, int IdIdioma)

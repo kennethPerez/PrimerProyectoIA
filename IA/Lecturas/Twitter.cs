@@ -21,7 +21,7 @@ namespace IA.Lecturas
             string result = "";
             foreach (var tweet in tweets)
             {
-                result += @tweet.Text + "\n";
+                result += "{'post':'" + @tweet.Text + "'}^";
             }
 
             return result;

@@ -7,7 +7,7 @@ using System.Web;
 
 namespace IA.detectarIdioma
 {
-    public class DrawChart
+    public class DrawChartMessage
     {
         StringBuilder str = new StringBuilder();
 
@@ -22,15 +22,15 @@ namespace IA.detectarIdioma
                        google.setOnLoadCallback(drawChart);
                        function drawChart() {
         var data = new google.visualization.DataTable();
-        data.addColumn('string', 'Letras');
-        data.addColumn('number', 'Frecuencias');      
+        data.addColumn('string', 'Idioma');
+        data.addColumn('number', 'Porcentajes');      
 
         data.addRows(" + dt.Rows.Count + ");");
 
                 for (int i = 0; i <= dt.Rows.Count - 1; i++)
                 {
-                    str.Append("data.setValue( " + i + "," + 0 + "," + "'" + dt.Rows[i]["Letter"].ToString() + "');");
-                    str.Append("data.setValue(" + i + "," + 1 + "," + dt.Rows[i]["Frequency"].ToString() + ") ;");
+                    str.Append("data.setValue( " + i + "," + 0 + "," + "'" + dt.Rows[i]["idioma"].ToString() + "');");
+                    str.Append("data.setValue(" + i + "," + 1 + "," + dt.Rows[i]["porcentaje"].ToString() + ") ;");
                 }
 
                 str.Append(" var chart = new google.visualization.ColumnChart(document.getElementById('" + div + "'));");

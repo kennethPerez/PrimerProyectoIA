@@ -168,11 +168,11 @@
     <Compile Include="bayes-algoritmo\bayes-logic.cs" />
     <Compile Include="DataBaseContext\DataBaseContext.cs" />
     <Compile Include="DataBaseContext\IAInicializador.cs" />
+    <Compile Include="detectarIdioma\DrawChartMessage.cs" />
     <Compile Include="detectarIdioma\DrawChart.cs" />
     <Compile Include="detectarIdioma\LanguageDetector.cs" />
     <Compile Include="index.aspx.cs">
       <DependentUpon>index.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="index.aspx.designer.cs">
       <DependentUpon>index.aspx</DependentUpon>
