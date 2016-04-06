@@ -60,67 +60,170 @@ namespace IA
         }
 
         public void idioma_click(object sender, EventArgs e) {
-
-
-            if (IA.aprender.Aprender.vienenTweets)
-            {
-
-                IA.aprender.Aprender.vienenTweets = false;
-                string[] stringSeparado= text_area.Text.Split('\n');
-
-                foreach (string palabra in stringSeparado)
-                {
-                    try
-                    {
-                        JObject jresult = JObject.Parse(palabra);
-                        int IdIdioma = 99;
-                        string Idioma = languageDetector.classifier(jresult["text"].ToString());
-                        if (Idioma.Equals("Ingles"))
-                        {
-                            IdIdioma = 2;
-                        }
-                        if (Idioma.Equals("Aleman"))
-                        {
-                            IdIdioma = 3;
-                        }
-                        if (Idioma.Equals("Español"))
-                        {
-                            IdIdioma = 1;
-                        }
-                        if (Idioma.Equals("Turco"))
-                        {
-                            IdIdioma = 4;
-                        }
-                        ResultTweets x = new ResultTweets(jresult["user"]["screen_name"].ToString(), IdIdioma, jresult["text"].ToString());
-                        ListaDeTweets.Add(x);
-                    }
-                    catch (Exception xd)
-                    {
-                        continue;
-                    }
-                    /*ANALIZAR CADA TWEETS CADA EN JSON*/
-                 }
-            }
-
-
-
-            else {
-                if (text_area.Text != "" && text_area.Text != "Debe de ingresar algun texto para ser clasificado." &&
+            
+            if (text_area.Text != "" && text_area.Text != "Debe de ingresar algun texto para ser clasificado." &&
                     text_area.Text != "Debe ingresar una url." && text_area.Text != "Debe de ingresar algun texto para ser identificado." &&
                     text_area.Text != "Error no ha seleccionado un archivo o este esta vacio." && text_area.Text != "Error al cargar los archivos." && text_area.Text != "Formato de archivo no valido.")
+            {
+
+                
+
+                if (IA.aprender.Aprender.vienenPosts) {
+                    IA.aprender.Aprender.vienenPosts = false;
+                    IA.aprender.Aprender.vienenTweets = false;
+                    string[] stringSeparado = text_area.Text.Split('^');
+
+                    foreach (string palabra in stringSeparado)
+                    {
+                        try
+                        {
+                            JObject jresult = JObject.Parse(palabra);
+                            int IdIdioma = 99;
+                            string Idioma = languageDetector.classifier(jresult["post"].ToString());
+                            if (Idioma.Equals("Ingles"))
+                            {
+                                IdIdioma = 2;
+                            }
+                            if (Idioma.Equals("Aleman"))
+                            {
+                                IdIdioma = 3;
+                            }
+                            if (Idioma.Equals("Español"))
+                            {
+                                IdIdioma = 1;
+                            }
+                            if (Idioma.Equals("Turco"))
+                            {
+                                IdIdioma = 4;
+                            }
+                            ResultTweets x = new ResultTweets(null, IdIdioma, jresult["post"].ToString());
+                            ListaDeTweets.Add(x);
+                        }
+                        catch (Exception ex)
+                        {
+                            continue;
+                        }
+                        /*ANALIZAR CADA post CADA EN JSON*/
+                    }
+                    usuariosAnalizados.Text = "La cantidad de usuarios es: 1";
+                    teewsAnalizados.Text = "La cantidad de mensajes analizados es: " + ListaDeTweets.Count.ToString();
+
+                    DrawChartMessage drm = new DrawChartMessage();
+                    DataTable table = new DataTable();
+                    table.Columns.Add("idioma", typeof(string));
+                    table.Columns.Add("porcentaje", typeof(double));
+
+                    double esp = 0.0;
+                    double ing = 0.0;
+                    double ale = 0.0;
+                    double tur = 0.0;
+                    foreach (ResultTweets t in ListaDeTweets)
+                    {
+                        if (t.idIdioma == 1)
+                            esp++;
+                        if (t.idIdioma == 2)
+                            ing++;
+                        if (t.idIdioma == 3)
+                            ale++;
+                        if (t.idIdioma == 4)
+                            tur++;
+                    }
+
+                    table.Rows.Add("Español", (esp / ListaDeTweets.Count) * 100);
+                    table.Rows.Add("Ingles", (ing / ListaDeTweets.Count) * 100);
+                    table.Rows.Add("Aleman", (ale / ListaDeTweets.Count) * 100);
+                    table.Rows.Add("Turco", (tur / ListaDeTweets.Count) * 100);
+
+                    LiteralMessage.Text = drm.BindChart(table, "chartJson", "Porcentaje de idiomas", "Idiomas");
+                }
+
+                if (IA.aprender.Aprender.vienenTweets)
                 {
-                    string Idioma = languageDetector.classifier(text_area.Text);
-                    language.Text = "El idioma detectado es: " + Idioma;
+
+                    IA.aprender.Aprender.vienenTweets = false;
+                    string[] stringSeparado = text_area.Text.Split('\n');
+
+                    foreach (string palabra in stringSeparado)
+                    {
+                        try
+                        {
+                            JObject jresult = JObject.Parse(palabra);
+                            int IdIdioma = 99;
+                            string Idioma = languageDetector.classifier(jresult["text"].ToString());
+                            if (Idioma.Equals("Ingles"))
+                            {
+                                IdIdioma = 2;
+                            }
+                            if (Idioma.Equals("Aleman"))
+                            {
+                                IdIdioma = 3;
+                            }
+                            if (Idioma.Equals("Español"))
+                            {
+                                IdIdioma = 1;
+                            }
+                            if (Idioma.Equals("Turco"))
+                            {
+                                IdIdioma = 4;
+                            }
+                            ResultTweets x = new ResultTweets(jresult["user"]["screen_name"].ToString(), IdIdioma, jresult["text"].ToString());
+                            ListaDeTweets.Add(x);
+                        }
+                        catch (Exception ex)
+                        {
+                            continue;
+                        }
+                        /*ANALIZAR CADA TWEETS CADA EN JSON*/
+                    }
+                    usuariosAnalizados.Text ="La cantidad de usuarios es: "+ ListaDeTweets.Count.ToString();
+                    teewsAnalizados.Text = "La cantidad de mensajes analizados es: " + ListaDeTweets.Count.ToString();
+
+                    DrawChartMessage drm = new DrawChartMessage();
+                    DataTable table = new DataTable();
+                    table.Columns.Add("idioma", typeof(string));
+                    table.Columns.Add("porcentaje", typeof(double));
+
+                    double esp = 0.0;
+                    double ing = 0.0;
+                    double ale = 0.0;
+                    double tur = 0.0;
+                    foreach (ResultTweets t in ListaDeTweets)
+                    {
+                        if (t.idIdioma == 1)
+                            esp++;
+                        if (t.idIdioma == 2)
+                            ing++;
+                        if (t.idIdioma == 3)
+                            ale++;
+                        if (t.idIdioma == 4)
+                            tur++;
+                    }
+
+                    table.Rows.Add("Español", (esp / ListaDeTweets.Count) * 100);
+                    table.Rows.Add("Ingles", (ing / ListaDeTweets.Count) * 100);
+                    table.Rows.Add("Aleman", (ale / ListaDeTweets.Count) * 100);
+                    table.Rows.Add("Turco", (tur / ListaDeTweets.Count) * 100);
+
+                    LiteralMessage.Text = drm.BindChart(table, "chartJson", "Porcentaje de idiomas", "Idiomas");
+                }
+
+                    string idioma = languageDetector.classifier(text_area.Text);
+                    language.Text = "El idioma detectado es: " + idioma;
 
                     DataTable result = LanguageDetector.DictionaryToDatatable(languageDetector.DictText);
-                    DataTable origin = LanguageDetector.DictionaryToDatatable(languageDetector.GetDictionary(Idioma));
+                    DataTable origin = LanguageDetector.DictionaryToDatatable(languageDetector.GetDictionary(idioma));
 
                     ltResult.Text = DrawChartResult.BindChart(result, "chartResult", "Frecuencia de letras en el texto", "Letras");
-                    ltBase.Text = DrawChartBase.BindChart(origin, "chartBase", "Frecuencia del idiama " + Idioma, "Letras");
-                }
-                else
-                    text_area.Text = "Debe ingresar un texto para poder detectar el idioma.";
-            }
+                    ltBase.Text = DrawChartBase.BindChart(origin, "chartBase", "Frecuencia del idioma " + idioma, "Letras");
+            }            
+            else
+                text_area.Text = "Debe ingresar un texto para poder detectar el idioma.";
+            
+        }
+
+        protected void facebook(object sender, EventArgs e)
+        {
+            IA.aprender.Aprender.vienenPosts = true;
         }
 
         protected void CargarArchivo_Click(object sender, EventArgs e)
@@ -130,6 +233,7 @@ namespace IA
             text_area.Text = FileU.cargarArchivos(archivos);
 
         }
+
         protected void aprender(object sender, EventArgs e)
         {
 
@@ -183,6 +287,7 @@ namespace IA
             }
             else text_area.Text = "Debe ingresar una url.";
         }
+
         protected void categorizar(object sender, EventArgs e)
         {
 
@@ -244,6 +349,7 @@ namespace IA
             
 
         }
+
         private class resN
         {
             public double prob;
@@ -264,8 +370,6 @@ namespace IA
                 this.index = t;
             }
         }
-
-
         private res estaEnLista(List<bayesCategoria> data,int muestraID)
         {
             for (int i = 0; i < data.Count; i++)
@@ -277,6 +381,7 @@ namespace IA
             }
             return new res(false,0);
         }
+
         protected void Json_Click(object sender, EventArgs e)
         {
             ListaDeTweets.Clear();
@@ -288,6 +393,7 @@ namespace IA
                 text_area.Text = GetJson.UnzipJsonText(text_area.Text);
             }
         }
+
         protected void Xml_Click(object sender, EventArgs e)
         {
 
@@ -315,6 +421,7 @@ namespace IA
                 text_area.Text != "Debe ingresar una url." && text_area.Text != "Debe de ingresar algun texto para ser identificado." &&
                 text_area.Text != "Error no ha seleccionado un archivo o este esta vacio." && text_area.Text != "Error al cargar los archivos." && text_area.Text != "Formato de archivo no valido.")
             {
+                IA.aprender.Aprender.vienenPosts = true;
                 text_area.Text = GetTweets.getTweet(text_area.Text.Split(' ')[0], Int32.Parse(text_area.Text.Split(' ')[1]));
             }
         }        
