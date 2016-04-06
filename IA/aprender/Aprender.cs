@@ -13,6 +13,8 @@ namespace IA.aprender
         public static bool vienenTweets = false;
         public static bool vienenJson = false;
         public static bool vienenPosts = false;
+        public static List<ResultTweets> ListaDeTweets = new List<ResultTweets>();
+
         IA.stopWords.stopWords stopWords = new IA.stopWords.stopWords();
         private IAContext db = new IAContext();
         public string aprenderMuestra(bayesCategoria muestra, int IdIdioma)
@@ -34,7 +36,7 @@ namespace IA.aprender
                     i++;
                 }
                 db.SaveChanges();
-                return "Exito en la insercion de una muestra";
+                return "Exito en la insercion de una muestra.";
             }
             catch (Exception e)
             {
@@ -71,7 +73,7 @@ namespace IA.aprender
                     }
                     db.SaveChanges();
                 }
-                return "Exito  la insercion de palabras";
+                return "Exito en la insercion de palabras nuevas.";
             }
             catch (Exception e)
             {
@@ -150,7 +152,7 @@ namespace IA.aprender
                 }
                 if (PalabrasAAgregar.Count == 0)
                 {
-                    Res = "\n" + "no se agregaron palabras debido a que o ya existen las mas comunes o no cumplen los criterios";
+                    Res = "\n" + "No se agregaron palabras debido a que no existen palabras nuevas.";
                 }
                 else {
                     Res = "\n" + aprenderPalabras(PalabrasAAgregar, IdIdioma);

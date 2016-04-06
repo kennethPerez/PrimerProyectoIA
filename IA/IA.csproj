@@ -166,6 +166,7 @@
   <ItemGroup>
     <Compile Include="aprender\Aprender.cs" />
     <Compile Include="bayes-algoritmo\bayes-logic.cs" />
+    <Compile Include="bayes-algoritmo\DrawChartCategories.cs" />
     <Compile Include="DataBaseContext\DataBaseContext.cs" />
     <Compile Include="DataBaseContext\IAInicializador.cs" />
     <Compile Include="detectarIdioma\DrawChartMessage.cs" />

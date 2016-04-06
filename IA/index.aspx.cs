@@ -45,9 +45,7 @@ namespace IA
         LanguageDetector languageDetector = new LanguageDetector();
         DrawChart DrawChartResult = new DrawChart();
         DrawChart DrawChartBase = new DrawChart();
-
-
-        List<ResultTweets> ListaDeTweets = new List<ResultTweets>();
+                
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -71,7 +69,10 @@ namespace IA
                 if (IA.aprender.Aprender.vienenPosts) {
                     IA.aprender.Aprender.vienenPosts = false;
                     IA.aprender.Aprender.vienenTweets = false;
+
+                    //-----------------------------------------------------
                     IA.aprender.Aprender.vienenJson = true;
+
                     string[] stringSeparado = text_area.Text.Split('^');
 
                     foreach (string palabra in stringSeparado)
@@ -98,7 +99,7 @@ namespace IA
                                 IdIdioma = 4;
                             }
                             ResultTweets x = new ResultTweets(null, IdIdioma, jresult["post"].ToString());
-                            ListaDeTweets.Add(x);
+                            IA.aprender.Aprender.ListaDeTweets.Add(x);
                         }
                         catch (Exception ex)
                         {
@@ -107,7 +108,7 @@ namespace IA
                         /*ANALIZAR CADA post CADA EN JSON*/
                     }
                     usuariosAnalizados.Text = "La cantidad de usuarios es: 1";
-                    teewsAnalizados.Text = "La cantidad de mensajes analizados es: " + ListaDeTweets.Count.ToString();
+                    teewsAnalizados.Text = "La cantidad de mensajes analizados es: " + IA.aprender.Aprender.ListaDeTweets.Count.ToString();
 
                     DrawChartMessage drm = new DrawChartMessage();
                     DataTable table = new DataTable();
@@ -118,7 +119,7 @@ namespace IA
                     double ing = 0.0;
                     double ale = 0.0;
                     double tur = 0.0;
-                    foreach (ResultTweets t in ListaDeTweets)
+                    foreach (ResultTweets t in IA.aprender.Aprender.ListaDeTweets)
                     {
                         if (t.idIdioma == 1)
                             esp++;
@@ -130,10 +131,10 @@ namespace IA
                             tur++;
                     }
 
-                    table.Rows.Add("Español", (esp / ListaDeTweets.Count) * 100);
-                    table.Rows.Add("Ingles", (ing / ListaDeTweets.Count) * 100);
-                    table.Rows.Add("Aleman", (ale / ListaDeTweets.Count) * 100);
-                    table.Rows.Add("Turco", (tur / ListaDeTweets.Count) * 100);
+                    table.Rows.Add("Español", (esp / IA.aprender.Aprender.ListaDeTweets.Count) * 100);
+                    table.Rows.Add("Ingles", (ing / IA.aprender.Aprender.ListaDeTweets.Count) * 100);
+                    table.Rows.Add("Aleman", (ale / IA.aprender.Aprender.ListaDeTweets.Count) * 100);
+                    table.Rows.Add("Turco", (tur / IA.aprender.Aprender.ListaDeTweets.Count) * 100);
 
                     LiteralMessage.Text = drm.BindChart(table, "chartJson", "Porcentaje de idiomas", "Idiomas");
                 }
@@ -168,7 +169,7 @@ namespace IA
                                 IdIdioma = 4;
                             }
                             ResultTweets x = new ResultTweets(jresult["user"]["screen_name"].ToString(), IdIdioma, jresult["text"].ToString());
-                            ListaDeTweets.Add(x);
+                            IA.aprender.Aprender.ListaDeTweets.Add(x);
                         }
                         catch (Exception ex)
                         {
@@ -176,8 +177,8 @@ namespace IA
                         }
                         /*ANALIZAR CADA TWEETS CADA EN JSON*/
                     }
-                    usuariosAnalizados.Text ="La cantidad de usuarios es: "+ ListaDeTweets.Count.ToString();
-                    teewsAnalizados.Text = "La cantidad de mensajes analizados es: " + ListaDeTweets.Count.ToString();
+                    usuariosAnalizados.Text ="La cantidad de usuarios es: "+ IA.aprender.Aprender.ListaDeTweets.Count.ToString();
+                    teewsAnalizados.Text = "La cantidad de mensajes analizados es: " + IA.aprender.Aprender.ListaDeTweets.Count.ToString();
 
                     DrawChartMessage drm = new DrawChartMessage();
                     DataTable table = new DataTable();
@@ -188,7 +189,7 @@ namespace IA
                     double ing = 0.0;
                     double ale = 0.0;
                     double tur = 0.0;
-                    foreach (ResultTweets t in ListaDeTweets)
+                    foreach (ResultTweets t in IA.aprender.Aprender.ListaDeTweets)
                     {
                         if (t.idIdioma == 1)
                             esp++;
@@ -200,10 +201,10 @@ namespace IA
                             tur++;
                     }
 
-                    table.Rows.Add("Español", (esp / ListaDeTweets.Count) * 100);
-                    table.Rows.Add("Ingles", (ing / ListaDeTweets.Count) * 100);
-                    table.Rows.Add("Aleman", (ale / ListaDeTweets.Count) * 100);
-                    table.Rows.Add("Turco", (tur / ListaDeTweets.Count) * 100);
+                    table.Rows.Add("Español", (esp / IA.aprender.Aprender.ListaDeTweets.Count) * 100);
+                    table.Rows.Add("Ingles", (ing / IA.aprender.Aprender.ListaDeTweets.Count) * 100);
+                    table.Rows.Add("Aleman", (ale / IA.aprender.Aprender.ListaDeTweets.Count) * 100);
+                    table.Rows.Add("Turco", (tur / IA.aprender.Aprender.ListaDeTweets.Count) * 100);
 
                     LiteralMessage.Text = drm.BindChart(table, "chartJson", "Porcentaje de idiomas", "Idiomas");
                 }
@@ -225,6 +226,7 @@ namespace IA
         protected void facebook(object sender, EventArgs e)
         {
             IA.aprender.Aprender.vienenPosts = true;
+            IA.aprender.Aprender.ListaDeTweets.Clear();
         }
 
         protected void CargarArchivo_Click(object sender, EventArgs e)
@@ -289,18 +291,54 @@ namespace IA
             else text_area.Text = "Debe ingresar una url.";
         }
 
+
+        private List<bayesCategoria> crearData(int idiomaId) {
+
+            List<bayesCategoria> data = new List<bayesCategoria>();
+            var query = from a in db.muestra join b in db.relacion on a.muestrasID equals b.muestraID join c in db.palabras on b.palabraID equals c.palabraID where c.IDdioma == idiomaId select new { muestra = a.muestrasID, categoria = a.categoria, palabra = c.palabra, frecuencia = b.frecuencia };
+
+            foreach (var jsonResult in query)
+            {
+                res respuesta = estaEnLista(data, jsonResult.muestra);
+                if (respuesta.boolean)  //si ya existe en la lista
+                {
+                    data.ElementAt(respuesta.index).palabra.Add(new bayesPalabra(jsonResult.palabra, jsonResult.frecuencia));
+                }
+                else     //sino existe
+                {
+                    List<bayesPalabra> lista = new List<bayesPalabra>();
+                    lista.Add(new bayesPalabra(jsonResult.palabra, jsonResult.frecuencia));
+                    data.Add(new bayesCategoria(jsonResult.categoria, lista, jsonResult.muestra));
+                }
+            }
+
+            return data;
+        }
+
         protected void categorizar(object sender, EventArgs e)
         {
+            // Crear las categorias
+            List<bayesCategoria> categorias = new List<bayesCategoria>();
+            var result = db.muestra.Select(m => m.categoria).Distinct();
+
+            foreach (string categoria in result)
+            {
+                categorias.Add(new bayesCategoria(categoria, new List<bayesPalabra>()));
+            }
+
+
 
             if (IA.aprender.Aprender.vienenJson)
             {
                 IA.aprender.Aprender.vienenJson = false;
-                foreach (ResultTweets t in ListaDeTweets)
+                foreach (ResultTweets t in IA.aprender.Aprender.ListaDeTweets)
                 {
-
+                    Respuesta Finalresult = new NaiveBayes(crearData(t.idIdioma), categorias, t.texto.ToLower()).classifier();
+                                        
                 }
             }
-            else {
+            else
+            {
                 int resultIdioma = 0;
                 switch (language.Text)
                 {
@@ -317,61 +355,37 @@ namespace IA
                         resultIdioma = 3;
                         break;
                 }
-
-                List<bayesCategoria> data = new List<bayesCategoria>();
-
-                var query = from a in db.muestra join b in db.relacion on a.muestrasID equals b.muestraID join c in db.palabras on b.palabraID equals c.palabraID where c.IDdioma == resultIdioma select new { muestra = a.muestrasID, categoria = a.categoria, palabra = c.palabra, frecuencia = b.frecuencia };
-
-
-                foreach (var jsonResult in query)
-                {
-                    res respuesta = estaEnLista(data, jsonResult.muestra);
-                    if (respuesta.boolean)  //si ya existe en la lista
-                    {
-                        data.ElementAt(respuesta.index).palabra.Add(new bayesPalabra(jsonResult.palabra, jsonResult.frecuencia));
-                    }
-                    else     //sino existe
-                    {
-                        List<bayesPalabra> lista = new List<bayesPalabra>();
-                        lista.Add(new bayesPalabra(jsonResult.palabra, jsonResult.frecuencia));
-                        data.Add(new bayesCategoria(jsonResult.categoria, lista, jsonResult.muestra));
-
-                    }
-
-                }
-
-                List<bayesCategoria> categorias = new List<bayesCategoria>();
-                var result = db.muestra.Select(m => m.categoria).Distinct();
-
-                foreach (string categoria in result)
-                {
-                    categorias.Add(new bayesCategoria(categoria, new List<bayesPalabra>()));
-                }
-
+                
 
                 string texto = text_area.Text;
+                Respuesta Finalresult = new NaiveBayes(crearData(resultIdioma), categorias, texto.ToLower()).classifier();
 
-                Console.WriteLine("Texto: " + texto.ToLower() + "\n");
+                DrawChartCategories drc = new DrawChartCategories();
+                DataTable table = new DataTable();
+                table.Columns.Add("categoria", typeof(string));
+                table.Columns.Add("porcentaje", typeof(double));
 
-                Respuesta Finalresult = new NaiveBayes(data, categorias, texto.ToLower()).classifier();
-                string concat = "";
                 List<resN> probFinales = new List<resN>();
                 foreach (ResultNaiveBayes r in Finalresult.listaDeProbabilidadesFinales)
                 {
-                    double prob = r.probabilidad * 100;
-                    probFinales.Add(new resN(prob, r.categoria));
-                    concat += r.categoria + " = " + prob + "%\n";
+                    table.Rows.Add(r.categoria, r.probabilidad * 100);
+                    probFinales.Add(new resN(r.probabilidad * 100, r.categoria));
                 }
+
 
                 List<resN> SortedList = probFinales.OrderBy(o => o.prob).ToList();
                 SortedList.Reverse();
 
+                string a = "";
+
                 if (SortedList.ElementAt(0).prob > 80)
                 {
-                    text_area.Text += aprendizaje.aprender(text_area.Text, 1, SortedList.ElementAt(0).cat, true, true);
+                    a = aprendizaje.aprender(text_area.Text, 1, SortedList.ElementAt(0).cat, true, true);
                 }
-                text_area.Text = concat;
 
+                categoria.Text = "La categoria es: " + SortedList.ElementAt(0).cat + " con un " + SortedList.ElementAt(0).prob + "%";
+                response.Text = a;
+                LiteralCateTexto.Text = drc.BindChart(table, "chartCateTexto", "Porcentaje de Categorias", "Categorias");                                
             }
 
         }
@@ -410,7 +424,7 @@ namespace IA
 
         protected void Json_Click(object sender, EventArgs e)
         {
-            ListaDeTweets.Clear();
+            IA.aprender.Aprender.ListaDeTweets.Clear();
             IA.aprender.Aprender.vienenTweets = true;
             if (text_area.Text != "" && text_area.Text != "Debe de ingresar algun texto para ser clasificado." &&
                 text_area.Text != "Debe ingresar una url." && text_area.Text != "Debe de ingresar algun texto para ser identificado." &&
@@ -447,6 +461,7 @@ namespace IA
                 text_area.Text != "Debe ingresar una url." && text_area.Text != "Debe de ingresar algun texto para ser identificado." &&
                 text_area.Text != "Error no ha seleccionado un archivo o este esta vacio." && text_area.Text != "Error al cargar los archivos." && text_area.Text != "Formato de archivo no valido.")
             {
+                IA.aprender.Aprender.ListaDeTweets.Clear();
                 IA.aprender.Aprender.vienenPosts = true;
                 text_area.Text = GetTweets.getTweet(text_area.Text.Split(' ')[0], Int32.Parse(text_area.Text.Split(' ')[1]));
             }

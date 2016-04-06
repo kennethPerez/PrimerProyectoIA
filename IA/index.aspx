@@ -142,9 +142,9 @@
                 <div id="chartResult" class="col-md-6">  <asp:Literal ID="ltResult" runat="server"></asp:Literal></div>                    
                 <div id="chartBase" class="col-md-6">  <asp:Literal ID="ltBase" runat="server"></asp:Literal></div>
             </div>
-            <br>    
-            <hr>
-            <br>
+            <br />    
+            <hr />
+            <br />
             <div class="col-md-12">
                 <div class="col-md-6"> 
                     <br>
@@ -157,6 +157,17 @@
                 </div>                    
                 <div id="chartJson" class="col-md-6">  <asp:Literal ID="LiteralMessage" runat="server"></asp:Literal></div>
             </div> 
+
+            <br />    
+            <hr />
+            <br />
+            <asp:Label Font-Size="Large" ForeColor="#5c7fa0" ID="categoria" runat="server"></asp:Label>
+            <br />
+            <asp:Label Font-Size="Large" ForeColor="#5c7fa0" ID="response" runat="server"></asp:Label>
+            <div class="col-md-12">                  
+                <div id="chartCateTexto" class="col-md-6">  <asp:Literal ID="LiteralCateTexto" runat="server"></asp:Literal></div>
+            </div>
+
         </form>   
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
